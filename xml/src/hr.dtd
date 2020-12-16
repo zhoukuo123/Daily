@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT hr (employee+)> <!-- + :至少出现一次 -->
+<!ELEMENT employee (name, age, salary, department)>
+<!ATTLIST employee no CDATA "">
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT age (#PCDATA)>
+<!ELEMENT salary (#PCDATA)>
+<!ELEMENT department (dname, address)>
+<!ELEMENT dname (#PCDATA)>
+<!ELEMENT address (#PCDATA)>

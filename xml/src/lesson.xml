@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lesson>
+    <content>
+        <![CDATA[
+        本节我们来学习html中a标签的使用:
+        <body>
+            <a href="index.html">首页</a>
+        </body>
+        ]]>
+    </content>
+</lesson>

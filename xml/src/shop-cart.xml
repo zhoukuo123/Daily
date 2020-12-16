@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shop-cart>
+    <item sm="771938" category="电器">
+        <name>XX空调</name>
+        <price>2000.00</price>
+        <num>1</num>
+    </item>
+    <item sn="890321" category="食品">
+        <name>法式面包</name>
+        <price>10.00</price>
+        <num>5</num>
+    </item>
+</shop-cart>
