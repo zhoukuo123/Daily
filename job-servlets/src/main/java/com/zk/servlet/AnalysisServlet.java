@@ -4,7 +4,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
-@WebServlet(urlPatterns = "/unused", loadOnStartup = 2)
+@WebServlet(urlPatterns = "/unused-analysis", loadOnStartup = 2)
 public class AnalysisServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {

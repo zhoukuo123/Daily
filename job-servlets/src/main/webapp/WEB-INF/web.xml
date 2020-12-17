@@ -4,21 +4,31 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-<!--    <servlet>-->
-<!--        <servlet-name>create</servlet-name>-->
-<!--        <servlet-class>com.zk.servlet.CreateServlet</servlet-class>-->
-<!--        <load-on-startup>0</load-on-startup>-->
-<!--    </servlet>-->
+        <servlet>
+            <servlet-name>create</servlet-name>
+            <servlet-class>com.zk.servlet.CreateServlet</servlet-class>
+            <load-on-startup>0</load-on-startup>
+        </servlet>
 
-<!--    <servlet>-->
-<!--        <servlet-name>import</servlet-name>-->
-<!--        <servlet-class>com.zk.servlet.ImportServlet</servlet-class>-->
-<!--        <load-on-startup>1</load-on-startup>-->
-<!--    </servlet>-->
+        <servlet-mapping>
+            <servlet-name>create</servlet-name>
+            <url-pattern>/create</url-pattern>
+        </servlet-mapping>
 
-<!--    <servlet>-->
-<!--        <servlet-name>analysis</servlet-name>-->
-<!--        <servlet-class>com.zk.servlet.AnalysisServlet</servlet-class>-->
-<!--        <load-on-startup>2</load-on-startup>-->
-<!--    </servlet>-->
+        <servlet>
+            <servlet-name>import</servlet-name>
+            <servlet-class>com.zk.servlet.ImportServlet</servlet-class>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+
+        <servlet-mapping>
+            <servlet-name>import</servlet-name>
+            <url-pattern>/import</url-pattern>
+        </servlet-mapping>
+
+<!--        <servlet>-->
+<!--            <servlet-name>analysis</servlet-name>-->
+<!--            <servlet-class>com.zk.servlet.AnalysisServlet</servlet-class>-->
+<!--            <load-on-startup>2</load-on-startup>-->
+<!--        </servlet>-->
 </web-app>
