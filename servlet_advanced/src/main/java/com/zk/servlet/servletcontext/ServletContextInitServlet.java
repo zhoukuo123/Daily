@@ -14,10 +14,11 @@ public class ServletContextInitServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // ServletContext 为Web应用程序全局对象
         ServletContext context = req.getServletContext();
-
+        String copyright = context.getInitParameter("copyright");
+        String title = context.getInitParameter("title");
         // 设置自定义属性
-        context.setAttribute("copyright", "©2020 Baidu (京)-经营性-2017-0020 京公网安备11000002000001号 京ICP证030173号");
-        context.setAttribute("title", "百度一下, 你就知道");
+        context.setAttribute("copyright", copyright);
+        context.setAttribute("title", title);
         resp.getWriter().println("init success");
     }
 }
