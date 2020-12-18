@@ -13,6 +13,8 @@ public class CheckLoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("用户登陆成功");
 
+        req.setAttribute("username", "admin");
+
         // 实现了请求转发的功能
 //        req.getRequestDispatcher("/direct/index").forward(req, resp);
 
