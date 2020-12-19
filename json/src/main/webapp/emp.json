@@ -1,0 +1,26 @@
+[
+  {
+    "empno": 7369,
+    "ename": "李宁",
+    "job": "软件工程师",
+    "hiredata": "2017-05-12",
+    "salary": 13000,
+    "dname": "研发部"
+  },
+  {
+    "empno": 7499,
+    "ename": "王乐",
+    "job": "客户经理",
+    "hiredata": "2017-04-22",
+    "salary": 10000,
+    "dname": "市场部",
+    "customers": [
+      {
+        "cname": "李东"
+      },
+      {
+        "cname": "刘楠"
+      }
+    ]
+  }
+]
