@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery实验室</title>
+    <style>
+        .mycla  ss {
+            font-style: italic;
+            color: darkblue;
+        }
+
+        .highlight {
+            color: red;
+            font-size: 30px;
+            background: lightblue;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <h2>jQuery选择器实验室</h2>
+    <input style="height: 24px" id="txtSelector">
+    <button id="btnSelect" style="height: 30px">选择</button>
+    <hr>
+    <div>
+        <p id="welcome">欢迎来到选择器实验室</p>
+        <ul>
+            <li>搜索引擎: <a href="http://www.baidu.com">百度</a> <span></span></li>
+            <li>搜索引擎: <a href="http://www.360.com">360</a> <span></span></li>
+            <li>搜索引擎: <a href="http://www.sogou.com">搜狗</a> <span></span></li>
+        </ul>
+    </div>
+    <p class="myclass">我是拥有myclass的p标签</p>
+    <form action="#" id="info" method="get">
+        <div>
+            用户名: <input type="text" name="uname" value="admin">
+            密码: <input type="password" name="upsd" value="123456">
+        </div>
+        <div>
+            婚姻状况:
+            <select id="marital_status">
+                <option value="1">未婚</option>
+                <option value="2">已婚</option>
+                <option value="3">离异</option>
+                <option value="4">丧偶</option>
+            </select>
+        </div>
+    </form>
+</div>
+
+<!--引入jQuery-->
+<script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+    /*
+        id选择器使用"#id值"进行选择
+        css选择器使用".css类名"进行选择
+     */
+    $("#marital_status").addClass("highlight");
+    $(".myclass").addClass("highlight");
+    document.getElementById("btnSelect").onclick = function () {
+        var selector = document.getElementById("txtSelector").value;
+        // $("a") : jquery的选择器方法
+        // a : 选择器表达式
+        $("*").removeClass("highlight");
+        $(selector).addClass("highlight");
+    }
+</script>
+
+</body>
+</html>
