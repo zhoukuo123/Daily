@@ -1,7 +1,7 @@
 package com.zk.servlet;
 
 import com.zk.device.Device;
-import com.zk.device.DeviceDactory;
+import com.zk.device.DeviceFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +17,7 @@ public class IndexServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Device device = DeviceDactory.getDevice(request);
+        Device device = DeviceFactory.getDevice(request);
         request.getRequestDispatcher(device.getIndex()).forward(request, response);
     }
 }

@@ -2,7 +2,7 @@ package com.zk.device;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class DeviceDactory {
+public class DeviceFactory {
     public static Device getDevice(HttpServletRequest req) {
         String userAgent = req.getHeader("user-agent");
         System.out.println(userAgent);

@@ -49,22 +49,18 @@
     </form>
 </div>
 
-<!--引入jQuery-->
 <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
 <script type="text/javascript">
-    /*
-        id选择器使用"#id值"进行选择
-        css选择器使用".css类名"进行选择
-     */
-    $("#marital_status").addClass("highlight");
-    $(".myclass").addClass("highlight");
-    document.getElementById("btnSelect").onclick = function () {
-        var selector = document.getElementById("txtSelector").value;
-        // $("a") : jquery的选择器方法
-        // a : 选择器表达式
-        $("*").removeClass("highlight");
-        $(selector).addClass("highlight");
-    }
+    $("p.myclass").click(function () {
+        // $(this)是指当前事件产生的对象
+        $(this).css("background-color", "yellow");
+    })
+
+    $("input[name='uname']").keypress(function (event) {
+        if (event.keyCode == 32) {
+            $(this).css("color", "red");
+        }
+    })
 </script>
 
 </body>

@@ -34,8 +34,12 @@
     <p class="myclass">我是拥有myclass的p标签</p>
     <form action="#" id="info" method="get">
         <div>
-            用户名: <input type="text" name="uname" value="admin">
-            密码: <input type="password" name="upsd" value="123456">
+            用户名:
+            <input type="text" name="uname" value="admin"/>
+
+            密码:
+            <input type="password" name="upsd" value="123456">
+
         </div>
         <div>
             婚姻状况:
@@ -46,25 +50,25 @@
                 <option value="4">丧偶</option>
             </select>
         </div>
+
     </form>
+    <div>
+        <span class="myclass">我是拥有myclass类的span标签</span>
+    </div>
 </div>
 
-<!--引入jQuery-->
 <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
 <script type="text/javascript">
-    /*
-        id选择器使用"#id值"进行选择
-        css选择器使用".css类名"进行选择
-     */
-    $("#marital_status").addClass("highlight");
-    $(".myclass").addClass("highlight");
-    document.getElementById("btnSelect").onclick = function () {
-        var selector = document.getElementById("txtSelector").value;
-        // $("a") : jquery的选择器方法
-        // a : 选择器表达式
-        $("*").removeClass("highlight");
-        $(selector).addClass("highlight");
-    }
+    $("input[name='uanme']").val("administrator");
+    var v = $("input[name='uanme']").val();
+    alert(v);
+    // text与html方法最大的区别在于对于文本中的html标签是否进行转义
+    // $("span.myclass").text("锄禾日当午, 汗滴禾下土");
+    $("span.myclass").html("<b>锄禾日当午, 汗滴禾下土</b>")
+
+    var html = $("span.myclass").html();
+    var html2 = $("span.myclass").text();
+    alert(html);
 </script>
 
 </body>
