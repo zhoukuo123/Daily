@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input id="btnLoad" type="button" value="加载">
+<div id="divContent"></div>
+<script type="text/javascript">
+    document.getElementById("btnLoad").onclick = function () {
+        // 1. 创建XmlHttpRequest对象
+
+
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        console.log(xmlhttp);
+        // 2. 发送Ajax请求
+        xmlhttp.open("GET", "/ajax/content", true);
+        xmlhttp.send();
+        // 3. 处理服务器响应
+        // 在XMLHttpRequest状态发生改变的时候触发事件
+        xmlhttp.onreadystatechange = function () {
+            // XMLHttpRequest的状态为4即代表响应被接受
+            // XMLHttpRequest.status == 200 代表服务器处理成功
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                // responseText属性保存了服务器返回的响应体的文本
+                var text = xmlhttp.responseText;
+                alert(text);
+            }
+        }
+    }
+</script>
+</body>
+</html>
