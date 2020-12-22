@@ -7,11 +7,10 @@
 <body>
 <input id="btnLoad" type="button" value="加载">
 <div id="divContent"></div>
+
 <script type="text/javascript">
     document.getElementById("btnLoad").onclick = function () {
         // 1. 创建XmlHttpRequest对象
-
-
         var xmlhttp;
         if (window.XMLHttpRequest) {
             xmlhttp = new XMLHttpRequest();
@@ -30,7 +29,8 @@
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 // responseText属性保存了服务器返回的响应体的文本
                 var text = xmlhttp.responseText;
-                alert(text);
+                // alert(text);
+                document.getElementById("divContent").innerHTML = text;
             }
         }
     }

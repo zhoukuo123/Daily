@@ -11,6 +11,6 @@ import java.io.IOException;
 public class ContentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("<b>I'm server content</b>");
+        resp.getWriter().println("<b style='color:red'>I'm server content</b>");
     }
 }
