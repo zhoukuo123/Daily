@@ -3,4 +3,26 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
+    <filter>
+        <filter-name>UrlPatternFilter</filter-name>
+        <filter-class>com.zk.filter.UrlPatternFilter</filter-class>
+    </filter>
+<!--默认首页index.jsp底层其实是隐式的跳转到了index.jsp, 所以url-pattern设置为 / 并不会对index.jsp进行拦截-->
+<!--    默认首页优先级高于servlet, 如果某个servlet映射地址为/, 访问项目根路径时, 会访问默认首页, 不会访问servlet-->
+    <filter-mapping>
+        <filter-name>UrlPatternFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+<!--        <url-pattern>/index.jsp</url-pattern>-->
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>UrlPatternFilter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>UrlPatternFilter</filter-name>
+        <url-pattern>/servlet/*</url-pattern>
+    </filter-mapping>
 </web-app>
