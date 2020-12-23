@@ -3,4 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
+<!--    filter标签用于说明哪个类是过滤器, 并在应用启动时自动加载-->
+    <filter>
+        <filter-name>MyFirstFilter</filter-name>
+        <filter-class>com.zk.filter.MyFirstFilter</filter-class>
+    </filter>
+
+<!--    filter-mapping标签用于说明过滤器对URL应用的范围-->
+<!--    url-pattern 说明过滤器作用范围, /* 代表对所有URL进行过滤-->
+    <filter-mapping>
+        <filter-name>MyFirstFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>
