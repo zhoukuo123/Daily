@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="#" method="post" id="frmInfo">
+    <div id="err" style="color:red;">
+
+    </div>
+    <div>
+        姓名: <input type="text" id="name" name="name">
+    </div>
+    <div>
+        身份证: <input type="text" id="idno" name="idno">
+    </div>
+    <div>
+        <input type="submit">
+    </div>
+</form>
+<script type="text/javascript">
+    // 进行表单的校验
+    document.getElementById("frmInfo").onsubmit = function () {
+        // 在JS中定义正则表达式对象只需要在/正则表达式/
+        var regExp = /^[\u4e00-\u9fa5]{2,8}$/;
+        var name = document.getElementById("name").value;
+        // 利用正则表达式校验数据, true代表匹配, false代表不匹配
+        if (regExp.test(name)) {
+            alert("验证通过, 准备提交");
+            return true;
+        } else {
+            document.getElementById("err").innerHTML = "无效姓名";
+            return false; // 代表表单不提交!
+        }
+    }
+</script>
+</body>
+</html>
