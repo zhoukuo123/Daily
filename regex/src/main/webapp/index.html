@@ -22,13 +22,20 @@
 <script type="text/javascript">
     // 进行表单的校验
     document.getElementById("frmInfo").onsubmit = function () {
-        // 在JS中定义正则表达式对象只需要在/正则表达式/
-        var regExp = /^[\u4e00-\u9fa5]{2,8}$/;
+        // 在JS中定义正则表达式对象只需要在 /正则表达式/
+        var regExp1 = /^[\u4e00-\u9fa5]{2,8}$/;
+        var regExp2 = /^[1234568]\d{16}[0-9xX]$/;
         var name = document.getElementById("name").value;
+        var idno = document.getElementById("idno").value;
         // 利用正则表达式校验数据, true代表匹配, false代表不匹配
-        if (regExp.test(name)) {
-            alert("验证通过, 准备提交");
-            return true;
+        if (regExp1.test(name)) {
+            if (regExp2.test(idno)) {
+                alert("验证通过, 准备提交");
+                return true;
+            } else {
+                document.getElementById("err").innerHTML = "无效身份证号";
+                return false; // 代表表单不提交!
+            }
         } else {
             document.getElementById("err").innerHTML = "无效姓名";
             return false; // 代表表单不提交!
