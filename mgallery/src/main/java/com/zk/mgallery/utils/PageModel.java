@@ -2,6 +2,7 @@ package com.zk.mgallery.utils;
 
 import com.zk.mgallery.entity.Painting;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // 分页模型对象
@@ -20,10 +21,17 @@ public class PageModel {
 
     }
 
+    /**
+     * 分页构造函数
+     * @param data 原始数据
+     * @param page 当前的页号
+     * @param rows 每页记录数
+     */
     public PageModel(List<Painting> data, int page, int rows) {
         this.page = page;
         this.rows = rows;
         totalRows = data.size();
+
         // 总页数计算规则: 总行数/每页记录数, 能整除页数取整, 不能整除向上取整
         // 例如: 18 / 6 = 3 | 20 / 6 = 3.33 向上取整 = 4
         // Math.ceil 浮点数向上取整   Math.floor 浮点数向下取整 返回double类型
@@ -119,5 +127,17 @@ public class PageModel {
 
     public void setPageData(List<Painting> pageData) {
         this.pageData = pageData;
+    }
+
+    public static void main(String[] args) {
+//        List sample = new ArrayList();
+//        for (int i = 1; i <= 100; i++) {
+//            sample.add(i);
+//        }
+//        PageModel pageModel = new PageModel(sample, 6, 8);
+//        System.out.println(pageModel.getPageData());
+//        System.out.println(pageModel.getTotalPages());
+//        System.out.println(pageModel.getPageStartRow());
+//        System.out.println(pageModel.getPageEndRow());
     }
 }
