@@ -54,6 +54,10 @@ public class XmlDataSource {
         }
     }
 
+    /**
+     * 获取所有油画Painting对象
+     * @return Painting List
+     */
     public static List<Painting> getRawData() {
         return data;
     }
