@@ -42,7 +42,7 @@ public class PageModel {
         // totalRows: 20 | totalPage: 4 | rows: 6
         // pageEndRow = 4 * 6 = 24 > 20 执行subList抛出下标越界异常
         if (pageEndRow > totalRows) {
-            pageEndRow = totalPages;
+            pageEndRow = totalRows;
         }
         pageData =  data.subList(pageStartRow, pageEndRow); // 得到分页数据
         if (page > 1) {
@@ -131,10 +131,10 @@ public class PageModel {
 
     public static void main(String[] args) {
 //        List sample = new ArrayList();
-//        for (int i = 1; i <= 100; i++) {
+//        for (int i = 1; i <= 15; i++) {
 //            sample.add(i);
 //        }
-//        PageModel pageModel = new PageModel(sample, 6, 8);
+//        PageModel pageModel = new PageModel(sample, 3, 6);
 //        System.out.println(pageModel.getPageData());
 //        System.out.println(pageModel.getTotalPages());
 //        System.out.println(pageModel.getPageStartRow());

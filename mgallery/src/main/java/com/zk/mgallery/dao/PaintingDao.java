@@ -23,6 +23,8 @@ public class PaintingDao {
         PageModel pageModel = new PageModel(list, page, rows);
         return pageModel;
     }
+
+
     public void append() {
 
     }
