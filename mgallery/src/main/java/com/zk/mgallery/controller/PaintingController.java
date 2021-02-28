@@ -19,6 +19,7 @@ public class PaintingController extends HttpServlet {
         // 1. 接收Http数据
         String page = request.getParameter("p"); // 页号
         String rows = request.getParameter("r"); // 每页记录数
+        String category = request.getParameter("c"); // 类型
         if (page == null) { // page设置默认值
             page = "1";
         }
@@ -27,7 +28,7 @@ public class PaintingController extends HttpServlet {
         }
 
         // 2. 调用Service方法, 得到处理结果
-        PageModel pageModel = paintingService.pagination(Integer.parseInt(page), Integer.parseInt(rows));
+        PageModel pageModel = paintingService.pagination(Integer.parseInt(page), Integer.parseInt(rows), category);
         request.setAttribute("pageModel", pageModel);
 
         // 3. 请求转发至对应JSP(view)进行数据展现

@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
@@ -10,6 +10,15 @@
     <script type="text/javascript" src="../../js/js1.js"></script>
 </head>
 <body>
+
+<c:if test="${param.c != null}">
+    <c:set var="categoryParam" value="&c=${param.c}"></c:set>
+</c:if>
+
+<c:if test="${param.c == null}">
+    <c:set var="categoryParam" value=""></c:set>
+</c:if>
+
 <div class="header">
     <div class="logo">
         <img src="../../image/logo.png">
@@ -17,8 +26,8 @@
     <div class="menu"   onclick="show_menu()" onmouseleave="show_menu1()">
         <div class="menu_title" ><a href="#">内容分类</a></div>
         <ul id="title">
-            <li>Realism</li>
-            <li>Abstract expressionism</li>
+            <li><a href="/page?c=1">现实主义</a></li>
+            <li><a href="/page?c=2">抽象主义</a></li>
         </ul>
     </div>
     <div class="auth">
@@ -57,17 +66,19 @@
     </div>
     <div class="page-nav">
         <ul>
-            <li><a href="/page?p=1">首页</a></li>
-            <li><a href="/page?p=${pageModel.hasPreviousPage ? pageModel.page - 1 : 1}">上一页</a></li>
+            <li><a href="/page?p=1${categoryParam}">首页</a></li>
+            <li><a href="/page?p=${pageModel.hasPreviousPage ? pageModel.page - 1 : 1}${categoryParam}">上一页</a></li>
             <c:forEach begin="1" end="${pageModel.totalPages}" var="pno" step="1">
             <li><span ${pno == pageModel.page ? "class='first-page'" : ""}>
-                    <a href="/page?p=${pno}">
+<%--                c不存在, 则href="/page?p=1" --%>
+<%--                c存在, 则href="/page?p=1&c=1" --%>
+                    <a href="/page?p=${pno}${categoryParam}">
                             ${pno}
                     </a>
             </span></li>
             </c:forEach>
-            <li><a href="/page?p=${pageModel.hasNextPage ? pageModel.page + 1 : pageModel.totalPages}">下一页</a></li>
-            <li><a href="/page?p=${pageModel.totalPages}">尾页</a></li>
+            <li><a href="/page?p=${pageModel.hasNextPage ? pageModel.page + 1 : pageModel.totalPages}${categoryParam}">下一页</a></li>
+            <li><a href="/page?p=${pageModel.totalPages}${categoryParam}">尾页</a></li>
         </ul>
     </div>
 </div>

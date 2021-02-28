@@ -14,15 +14,21 @@ public class PaintingService {
 
     /**
      * 数据分页查询
-     * @param page 页号
-     * @param rows 每页记录数
+     *
+     * @param page     页号
+     * @param rows     每页记录数
+     * @param category 可选参数, 分类编号
      * @return 分页对象
      */
-    public PageModel pagination(int page, int rows) {
+    public PageModel pagination(int page, int rows, String... category) {
         if (rows == 0) {
             throw new RuntimeException("无效的rows参数");
         }
-        return paintingDao.pagination(page, rows);
+        if (category.length == 0 || category[0] == null) {
+            return paintingDao.pagination(page, rows);
+        } else {
+            return paintingDao.pagination(Integer.parseInt(category[0]), page, rows);
+        }
     }
 
     public static void main(String[] args) {
