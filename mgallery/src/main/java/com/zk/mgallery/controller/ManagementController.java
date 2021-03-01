@@ -23,14 +23,13 @@ public class ManagementController extends HttpServlet {
         String method = request.getParameter("method");
         if (method.equals("list")) {
             list(request, response);
+        } else if (method.equals("delete")) {
+            
+        } else if (method.equals("show_create")) {
+            showCreatePage(request, response);          
+        } else if (method.equals("create")) {
+            create(request, response);
         }
-//        else if (method.equals("delete")) {
-//            delete(request, response);
-//        } else if (method.equals()) {
-//
-//        } else {
-//
-//        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,5 +48,19 @@ public class ManagementController extends HttpServlet {
         PageModel pageModel = paintingService.pagination(Integer.parseInt(p), Integer.parseInt(r));
         request.setAttribute("pageModel", pageModel);
         request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
+    }
+
+    // 显示新增页面
+    private void showCreatePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/jsp/create.jsp").forward(request, response);
+    }
+
+    // 新增油画方法
+    private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 文件上传时的数据处理与标准表单完全不同
+        String pname = request.getParameter("pname");
+        System.out.println(pname);
+
+//        request.getRequestDispatcher("/WEB-INF/jsp/create.jsp").forward(request, response);
     }
 }

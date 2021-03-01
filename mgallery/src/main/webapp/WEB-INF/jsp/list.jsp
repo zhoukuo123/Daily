@@ -9,6 +9,18 @@
     <script src="../../js/jquery.min.js" type="text/javascript"></script>
     <script src="../../js/sweetalert2.all.min.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="../../css/list.css">
+    <script type="text/javascript">
+        function showPreview(previewObj) {
+            var preview = $(previewObj).attr("data-preview");
+            var pname = $(previewObj).attr("data-pname");
+            Swal.fire({
+                title: pname,
+                html: "<img src='" + preview + "' style='width: 361px; height: 240px'>",
+                showCloseButton: true,
+                showConfirmButton: false
+            })
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -39,7 +51,7 @@
                     <td>${painting.pname}</td>
                     <td><fmt:formatNumber pattern="￥0.00" value="${painting.price}"/></td>
                     <td>${painting.description}</td>
-                    <td><a class="oplink" href="${painting.preview}">预览</a>
+                    <td><a class="oplink" data-preview="${painting.preview}" data-pname="${painting.pname}" href="javascript:void(0)" onclick="showPreview(this)">预览</a>
                         <a class="oplink" href="/management?method=list">修改</a>
                         <a class="oplink" href="#">删除</a>
                     </td>
