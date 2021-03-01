@@ -43,13 +43,18 @@ public class PaintingDao {
         PageModel pageModel = new PageModel(categoryList, page, rows);
         return pageModel;
     }
+
+    /**
+     * 数据新增
+     */
+    public void create(Painting painting) {
+        XmlDataSource.append(painting);
+    }
+
     public void append() {
 
     }
 
-    public void update() {
-
-    }
 
     public void delete() {
 

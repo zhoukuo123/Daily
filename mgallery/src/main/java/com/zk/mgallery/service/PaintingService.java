@@ -31,6 +31,10 @@ public class PaintingService {
         }
     }
 
+    public void create(Painting painting) {
+        paintingDao.create(painting);
+    }
+
     public static void main(String[] args) {
         PaintingService paintingService = new PaintingService();
 

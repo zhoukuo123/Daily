@@ -7,8 +7,9 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,14 @@ public class XmlDataSource {
         // /home/linux/new style/painting.xml
         // /home/linux/new%20style/painting.xml
         dataFile = XmlDataSource.class.getResource("/painting.xml").getPath();
+        reload();
+    }
+
+    // 重新加载xml文件, 得到data数据
+    private static void reload() {
+        URLDecoder decoder = new URLDecoder();
         try {
-            dataFile = URLDecoder.decode(dataFile, "UTF-8");
+            dataFile = decoder.decode(dataFile, "UTF-8");
 //            System.out.println(dataFile);
             // 利用Dom4j对XML进行解析
             SAXReader reader = new SAXReader();
@@ -34,6 +41,7 @@ public class XmlDataSource {
             Document document = reader.read(dataFile);
             // 2.利用Xpath得到XML节点集合
             List<Node> nodes = document.selectNodes("/root/painting");
+            data.clear();
 
             for (Node node : nodes) {
                 Element element = (Element) node;
@@ -62,9 +70,54 @@ public class XmlDataSource {
         return data;
     }
 
+    /**
+     * 追加新的油画数据
+     * @param painting Painting实体对象
+     */
+    public static void append(Painting painting) {
+        // 1. 读取XML文档, 得到Document对象
+        SAXReader reader = new SAXReader();
+        Writer writer = null;
+        try {
+            Document document = reader.read(dataFile);
+            // 2. 创建新的painting节点
+            Element root = document.getRootElement();
+            Element p = root.addElement("painting");
+            // 3. 创建painting节点的各个子节点
+            p.addAttribute("id", String.valueOf(data.size() + 1));
+            p.addElement("pname").setText(painting.getPname());
+            p.addElement("category").setText(painting.getCategory().toString());
+            p.addElement("price").setText(painting.getPrice().toString());
+            p.addElement("preview").setText(painting.getPreview());
+            p.addElement("description").setText(painting.getDescription());
+            // 4. 写入XML, 完成追加操作
+            writer = new OutputStreamWriter(new FileOutputStream(dataFile), StandardCharsets.UTF_8);
+            document.write(writer);
+            System.out.println(dataFile);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            reload(); // 内存与文件数据一致
+        }
+    }
+
     public static void main(String[] args) {
 //        new XmlDataSource();
 //        List<Painting> paintings = XmlDataSource.getRawData();
 //        System.out.println(paintings);
+        Painting painting = new Painting();
+        painting.setPname("测试油画");
+        painting.setCategory(1);
+        painting.setPrice(4000);
+        painting.setPreview("/upload/10.jpg");
+        painting.setDescription("测试油画描述");
+        XmlDataSource.append(painting);
     }
 }

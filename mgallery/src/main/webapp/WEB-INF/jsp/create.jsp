@@ -5,8 +5,9 @@
 <head>
     <meta charset="utf-8">
     <title>新增油画</title>
-    <link rel="stylesheet" type="text/css" href="css\create.css">
-    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/create.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/validation.js"></script>
 </head>
 <body>
 <div class="container">
@@ -19,12 +20,12 @@
                 <li>
                     <span>油画名称</span>
                     <span id="errPname"></span>
-                    <input id="pname" name="pname"/>
+                    <input id="pname" name="pname" onblur="checkEmpty('#pname', '#errPname')"/>
                 </li>
                 <li>
                     <span>油画类型</span>
                     <span id="errCategory"></span>
-                    <select id="category" name="category">
+                    <select id="category" name="category" onchange="checkCategory('#category', '#errCategory')">
                         <option value="-1">请选择油画类型</option>
                         <option value="1">现实主义</option>
                         <option value="2">抽象主义</option>
@@ -33,20 +34,23 @@
                 <li>
                     <span>油画价格</span>
                     <span id="errPrice"></span>
-                    <input id="price" name="price"/>
+                    <input id="price" name="price" onblur="checkPrice('#price', '#errPrice')"/>
                 </li>
                 <li>
                     <span>作品预览</span>
                     <span id="errPainting"></span>
                     <input id="painting" name="painting" type="file"
-                           style="padding-left: 0px;" accept="image/*"/>
+                           style="padding-left: 0px;" accept="image/*"
+                           onchange="checkFile('#painting', '#errPainting')"/>
                 </li>
 
                 <li>
                     <span>详细描述</span>
                     <span id="errDescription"></span>
                     <textarea
-                            id="description" name="description"></textarea>
+                            id="description" name="description"
+                            onblur="checkEmpty('#description', '#errDescription')"
+                    ></textarea>
                 </li>
                 <li style="text-align: center;">
                     <button type="submit" class="btn-button">提交表单</button>
