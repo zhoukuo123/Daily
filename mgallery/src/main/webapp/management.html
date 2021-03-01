@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <title>门户数据管理平台</title>
@@ -143,12 +143,12 @@
     <div class="pg_content">
 		<!-- 左侧功能区菜单 -->
         <div class="menu">
-        	<a href = "#" class="menu_item" target="ifcontent">油画列表</a>
-        	<a href = "#" class="menu_item" target="ifcontent">新增作品</a>
+        	<a href = "/management?method=list" class="menu_item" target="ifcontent">油画列表</a>
+        	<a href = "/management?method=show_create" class="menu_item" target="ifcontent">新增作品</a>
         </div>
 		<!-- 主体框架 -->
         <div class="content">
- 			<iframe name="ifcontent" style="width:100%;height:100%;overflow-y: hidden;border:0px;min-width: 800px;" src=""></iframe>
+ 			<iframe name="ifcontent" style="width:100%;height:100%;overflow-y: hidden;border:0px;min-width: 800px;" src="/management?method=list"></iframe>
         </div>
     </div>
 </body>

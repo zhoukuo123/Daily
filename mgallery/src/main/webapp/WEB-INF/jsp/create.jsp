@@ -8,6 +8,20 @@
     <link rel="stylesheet" type="text/css" href="css/create.css">
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/validation.js"></script>
+    <script type="text/javascript">
+        function checkSubmit() {
+            var r1 = checkEmpty("#pname", "errPname");
+            var r2 = checkCategory('#category', '#errCategory');
+            var r3 = checkPrice('#price', '#errPrice');
+            var r4 = checkFile('#painting', '#errPainting');
+            var r5 = checkEmpty('#description', '#errDescription');
+            if (r1 && r2 && r3 && r4 && r5) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -15,7 +29,7 @@
         <legend>新增油画</legend>
         <form action="/management?method=create" method="post"
               autocomplete="off"
-              enctype="multipart/form-data">
+              enctype="multipart/form-data" onsubmit="return checkSubmit()">
             <ul class="ulform">
                 <li>
                     <span>油画名称</span>
