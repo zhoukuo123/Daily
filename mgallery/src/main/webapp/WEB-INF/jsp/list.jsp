@@ -52,7 +52,7 @@
                     <td><fmt:formatNumber pattern="￥0.00" value="${painting.price}"/></td>
                     <td>${painting.description}</td>
                     <td><a class="oplink" data-preview="${painting.preview}" data-pname="${painting.pname}" href="javascript:void(0)" onclick="showPreview(this)">预览</a>
-                        <a class="oplink" href="/management?method=list">修改</a>
+                        <a class="oplink" href="/management?method=show_update&id=${painting.id}">修改</a>
                         <a class="oplink" href="#">删除</a>
                     </td>
                 </tr>

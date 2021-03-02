@@ -36,6 +36,8 @@ public class ManagementController extends HttpServlet {
             showCreatePage(request, response);
         } else if (method.equals("create")) {
             create(request, response);
+        } else if (method.equals("show_update")) {
+            showUpdatePage(request, response);
         }
     }
 
@@ -113,7 +115,15 @@ public class ManagementController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-//        request.getRequestDispatcher("/WEB-INF/jsp/create.jsp").forward(request, response);
+    /**
+     * 显示更新页面
+     */
+    private void showUpdatePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Painting painting = paintingService.findById(Integer.parseInt(id));
+        request.setAttribute("painting", painting);
+        request.getRequestDispatcher("/WEB-INF/jsp/update.jsp").forward(request, response);
     }
 }

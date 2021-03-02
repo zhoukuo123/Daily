@@ -51,16 +51,15 @@ public class PaintingDao {
         XmlDataSource.append(painting);
     }
 
-    public void append() {
-
-    }
-
-
-    public void delete() {
-
-    }
-
-    public void findAll() {
-
+    public Painting findById(Integer id) {
+        List<Painting> data = XmlDataSource.getRawData();
+        Painting painting = null;
+        for (Painting p : data) {
+            if (p.getId().equals(id)) {
+                painting = p;
+                break;
+            }
+        }
+        return painting;
     }
 }

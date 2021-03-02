@@ -35,6 +35,19 @@ public class PaintingService {
         paintingDao.create(painting);
     }
 
+    /**
+     * 按编号查询油画
+     * @param id 油画编号
+     * @return 油画对象
+     */
+    public Painting findById(Integer id) {
+        Painting p = paintingDao.findById(id);
+        if (p == null) {
+            throw new RuntimeException("[id=" + id + "]油画不存在");
+        }
+        return p;
+    }
+
     public static void main(String[] args) {
         PaintingService paintingService = new PaintingService();
 
