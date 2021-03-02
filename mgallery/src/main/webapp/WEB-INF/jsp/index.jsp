@@ -83,7 +83,7 @@
     </div>
 </div>
 <div class="footer">
-    <p><span>M-GALLARY</span> Weicai Learning Project</p>
+    <p><span>M-GALLARY</span> <a href="/management.html">后台管理系统</a></p>
 </div>
 </body>
 </html>

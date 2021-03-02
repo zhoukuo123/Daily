@@ -5,8 +5,8 @@
 <head>
     <meta charset="utf-8">
     <title>作品更新</title>
-    <link rel="stylesheet" type="text/css" href="css\create.css">
-    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/create.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/validation.js"></script>
     <script type="text/javascript">
         <!-- 提交前表单校验 -->
@@ -15,7 +15,13 @@
             var r1 = checkEmpty("#pname", "#errPname");
             var r2 = checkCategory('#category', '#errCategory');
             var r3 = checkPrice('#price', '#errPrice');
-            var r4 = checkFile('#painting', '#errPainting');
+            // var r4 = checkFile('#painting', '#errPainting');
+            var r4 = null;
+            if ($("#isPreviewModified").val() == 1) {
+                r4 = checkFile('#painting', 'errPainting');
+            } else {
+                r4 = true;
+            }
             var r5 = checkEmpty('#description', '#errDescription');
             if (r1 && r2 && r3 && r4 && r5) {
                 return true;
@@ -23,20 +29,32 @@
                 return false;
             }
         }
+
+        //jQuery的页面就绪函数
+        $(function () {
+            $("#category").val(${painting.category});
+        })
+
+        // 检查预览图片
+        function selectPreview() {
+            checkFile("#painting", "#errPainting");
+            $("#preview").hide();
+            $("#isPreviewModified").val(1);
+        }
     </script>
 </head>
 <body>
 <div class="container">
     <fieldset>
-        <legend>作品名称</legend>
-        <form action="[这里写更新URL]" method="post"
+        <legend>作品更新</legend>
+        <form action="/management?method=update" method="post"
               autocomplete="off" enctype="multipart/form-data"
               onsubmit="return checkSubmit()">
             <ul class="ulform">
                 <li>
                     <span>油画名称</span>
                     <span id="errPname"></span>
-                    <input id="pname" name="pname" onblur="checkEmpty('#pname','#errPname')"/>
+                    <input id="pname" name="pname" onblur="checkEmpty('#pname','#errPname')" value="${painting.pname}"/>
                 </li>
                 <li>
                     <span>油画类型</span>
@@ -50,12 +68,17 @@
                 <li>
                     <span>油画价格</span>
                     <span id="errPrice"></span>
-                    <input id="price" name="price" onblur="checkPrice('#price','#errPrice')"/>
+                    <input id="price" name="price" onblur="checkPrice('#price','#errPrice')" value="${painting.price}"/>
                 </li>
                 <li>
-                    <span>作品预览</span><span id="errPainting"></span><br/>
-                    <img id="preview" src="/upload/1.jpg" style="width:361px;height:240px"/><br/>
-                    <input id="painting" name="painting" type="file" style="padding-left:0px;" accept="image/*"/>
+                    <span>作品预览</span>
+<%--                    如果value=0说明没选择文件, 不用上传文件--%>
+<%--                    如果value=1说明选择了文件, 要上传文件到服务器--%>
+                    <input type="hidden" id="isPreviewModified" name="isPreviewModified" value="0">
+                    <span id="errPainting"></span><br/>
+                    <img id="preview" src="${painting.preview}" style="width:361px;height:240px"/><br/>
+                    <input id="painting" name="painting" type="file" style="padding-left:0px;" accept="image/*"
+                           onchange="selectPreview()"/>
                 </li>
 
                 <li>
@@ -63,10 +86,11 @@
                     <span id="errDescription"></span>
                     <textarea
                             id="description" name="description"
-                            onblur="checkEmpty('#description','#errDescription')"
-                    ></textarea>
+                            onblur="checkEmpty('#description','#errDescription') "
+                    >${painting.description}</textarea>
                 </li>
                 <li style="text-align: center;">
+                    <input type="hidden" id="id" name="id" value="${painting.id}">
                     <button type="submit" class="btn-button">提交表单</button>
                 </li>
             </ul>

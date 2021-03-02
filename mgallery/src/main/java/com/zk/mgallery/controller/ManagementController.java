@@ -38,6 +38,8 @@ public class ManagementController extends HttpServlet {
             create(request, response);
         } else if (method.equals("show_update")) {
             showUpdatePage(request, response);
+        } else if (method.equals("update")) {
+            update(request, response);
         }
     }
 
@@ -125,5 +127,66 @@ public class ManagementController extends HttpServlet {
         Painting painting = paintingService.findById(Integer.parseInt(id));
         request.setAttribute("painting", painting);
         request.getRequestDispatcher("/WEB-INF/jsp/update.jsp").forward(request, response);
+    }
+
+    private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 1. 初始化FileUpload组件
+        /**
+         * FileItemFactory 用于将前端表单的数据转换为一个个FileItem对象
+         * ServletFileUpload 则是为FileUpload组件提供Java web的Http请求解析
+         */
+        FileItemFactory factory = new DiskFileItemFactory();
+        ServletFileUpload sf = new ServletFileUpload(factory);
+        // 2. 遍历所有FileItem
+        try {
+            List<FileItem> formData = sf.parseRequest(request);
+            Painting painting = new Painting();
+            boolean isPreviewModified = false;
+            for (FileItem fi : formData) {
+                if (fi.isFormField()) {
+                    System.out.println("普通输入项:" + fi.getFieldName() + ":" + fi.getString("UTF-8"));
+                    switch (fi.getFieldName()) {
+                        case "pname":
+                            painting.setPname(fi.getString("UTF-8"));
+                            break;
+                        case "category":
+                            painting.setCategory(Integer.parseInt(fi.getString("UTF-8")));
+                            break;
+                        case "price":
+                            painting.setPrice(Integer.parseInt(fi.getString("UTF-8")));
+                            break;
+                        case "description":
+                            painting.setDescription((fi.getString("UTF-8")));
+                            break;
+                        case "isPreviewModified":
+                            if (fi.getString("UTF-8").equals("0")) {
+                                isPreviewModified = false;
+                            } else {
+                                isPreviewModified = true;
+                            }
+                            break;
+                        case "id":
+                            painting.setId(Integer.parseInt(fi.getString("UTF-8")));
+                            break;
+                    }
+                } else {
+                    // 3. 文件保存到服务器目录
+                    if (isPreviewModified) {
+                        String path = request.getServletContext().getRealPath("/upload");
+                        String fileName = UUID.randomUUID().toString();
+                        // fi.getName()得到原始文件名, 截取最后一个.后所有字符串, 得到扩展名 wxml.jpg -> .jpg
+                        String suffix = fi.getName().substring(fi.getName().lastIndexOf("."));
+
+                        // fi.write()写入目标文件
+                        fi.write(new File(path, fileName + suffix));
+                        painting.setPreview("/upload/" + fileName + suffix);
+                    }
+                }
+            }
+            paintingService.update(painting); // 更新功能
+            response.sendRedirect("/management?method=list"); // 返回列表页
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

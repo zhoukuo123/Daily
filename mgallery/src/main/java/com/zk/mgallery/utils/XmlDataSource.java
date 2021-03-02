@@ -12,6 +12,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TooManyListenersException;
 
 /**
  * 数据源类, 用于将XML文件解析为Java对象
@@ -105,6 +106,44 @@ public class XmlDataSource {
                 }
             }
             reload(); // 内存与文件数据一致
+        }
+    }
+
+    /**
+     * 更新对应id的XML油画数据
+     * @param painting 要更新的油画数据
+     */
+    public static void update(Painting painting) {
+        SAXReader reader = new SAXReader();
+        Writer writer = null;
+        try {
+            Document document = reader.read(dataFile);
+
+            // 节点路径[@属性名=属性值]
+            // /root/painting[@id=1]
+            List<Node> nodes = document.selectNodes("/root/painting[@id=" + painting.getId() + "]");
+            if (nodes.size() == 0) {
+                throw new RuntimeException("id=" + painting.getId() + "编号油画不存在");
+            }
+            Element p = (Element) nodes.get(0);
+            p.selectSingleNode("pname").setText(painting.getPname());
+            p.selectSingleNode("category").setText(painting.getCategory().toString());
+            p.selectSingleNode("price").setText(painting.getPrice().toString());
+            p.selectSingleNode("preview").setText(painting.getPreview());
+            p.selectSingleNode("description").setText(painting.getDescription());
+            writer = new OutputStreamWriter(new FileOutputStream(dataFile), StandardCharsets.UTF_8);
+            document.write(writer); // 写入XML
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            reload(); // 更新data
         }
     }
 

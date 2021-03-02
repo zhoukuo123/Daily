@@ -62,4 +62,8 @@ public class PaintingDao {
         }
         return painting;
     }
+
+    public void update(Painting painting) {
+        XmlDataSource.update(painting);
+    }
 }

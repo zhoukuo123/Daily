@@ -48,6 +48,10 @@ public class PaintingService {
         return p;
     }
 
+    public void update(Painting painting) {
+        paintingDao.update(painting);
+    }
+
     public static void main(String[] args) {
         PaintingService paintingService = new PaintingService();
 
