@@ -8,35 +8,31 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
- * 新增员工数据
+ * 员工调薪
  */
-public class InsertCommand implements Command {
+public class UpdateCommand implements Command {
     @Override
     public void execute() {
         Scanner in = new Scanner(System.in);
         System.out.println("请输入员工编号:");
         int eno = in.nextInt();
-        System.out.println("请输入员工姓名:");
-        String ename = in.next();
-        System.out.println("请输入员工薪资:");
+        System.out.println("请输入员工新的薪资:");
         float salary = in.nextFloat();
-        System.out.println("请输入隶属部门:");
-        String dname = in.next();
 
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
             conn = DbUtils.getConnection();
-            String sql = "insert into employee(eno, ename, salary, dname) value(?,?,?,?)";
-
+            String sql = "update employee set salary = ? where eno = ?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, eno);
-            pstmt.setString(2, ename);
-            pstmt.setFloat(3, salary);
-            pstmt.setString(4, dname);
-
-            int cnt = pstmt.executeUpdate(); // 所有写操作都使用executeUpdate
-            System.out.println(ename + "员工入职手续已办理");
+            pstmt.setFloat(1, salary);
+            pstmt.setInt(2, eno);
+            int cnt = pstmt.executeUpdate();
+            if (cnt == 1) {
+                System.out.println("员工薪资调整完毕");
+            } else {
+                System.out.println("未找到" + eno + "编号员工数据");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
