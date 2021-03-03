@@ -147,6 +147,41 @@ public class XmlDataSource {
         }
     }
 
+    public static void delete(int id) {
+        SAXReader reader = new SAXReader();
+        Writer writer = null;
+        try {
+            Document document = reader.read(dataFile);
+
+            List<Node> nodes = document.selectNodes("/root/painting[@id=" + id + "]");
+            if (nodes.size() == 0) {
+                throw new RuntimeException("id=" + id + "编号油画不存在");
+            }
+            Element p = (Element) nodes.get(0);
+            p.remove(p.selectSingleNode("pname"));
+            p.remove(p.selectSingleNode("category"));
+            p.remove(p.selectSingleNode("price"));
+            p.remove(p.selectSingleNode("preview"));
+            p.remove(p.selectSingleNode("description"));
+            Element root = document.getRootElement();
+//            Element removeElement = root.elementByID(String.valueOf(id));
+            root.remove(p); // 删除对应painting节点(仅仅是在内存中删除了)
+            writer = new OutputStreamWriter(new FileOutputStream(dataFile), StandardCharsets.UTF_8);
+            document.write(writer); // 写入XML
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            reload(); // 更新data
+        }
+    }
+
     public static void main(String[] args) {
 //        new XmlDataSource();
 //        List<Painting> paintings = XmlDataSource.getRawData();

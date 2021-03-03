@@ -12,8 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Response;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +33,7 @@ public class ManagementController extends HttpServlet {
         if (method.equals("list")) {
             list(request, response);
         } else if (method.equals("delete")) {
-
+            delete(request, response);
         } else if (method.equals("show_create")) {
             showCreatePage(request, response);
         } else if (method.equals("create")) {
@@ -141,7 +143,7 @@ public class ManagementController extends HttpServlet {
         try {
             List<FileItem> formData = sf.parseRequest(request);
             Painting painting = new Painting();
-            boolean isPreviewModified = false;
+            int isPreviewModified = 0;
             for (FileItem fi : formData) {
                 if (fi.isFormField()) {
                     System.out.println("普通输入项:" + fi.getFieldName() + ":" + fi.getString("UTF-8"));
@@ -160,9 +162,9 @@ public class ManagementController extends HttpServlet {
                             break;
                         case "isPreviewModified":
                             if (fi.getString("UTF-8").equals("0")) {
-                                isPreviewModified = false;
+                                isPreviewModified = 0;
                             } else {
-                                isPreviewModified = true;
+                                isPreviewModified = 1;
                             }
                             break;
                         case "id":
@@ -171,7 +173,7 @@ public class ManagementController extends HttpServlet {
                     }
                 } else {
                     // 3. 文件保存到服务器目录
-                    if (isPreviewModified) {
+                    if (isPreviewModified == 1) {
                         String path = request.getServletContext().getRealPath("/upload");
                         String fileName = UUID.randomUUID().toString();
                         // fi.getName()得到原始文件名, 截取最后一个.后所有字符串, 得到扩展名 wxml.jpg -> .jpg
@@ -183,10 +185,28 @@ public class ManagementController extends HttpServlet {
                     }
                 }
             }
-            paintingService.update(painting); // 更新功能
+            paintingService.update(painting, isPreviewModified); // 更新功能
             response.sendRedirect("/management?method=list"); // 返回列表页
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 客户端采用Ajax方式提交Http请求
+     * Controller方法处理后不再跳转任何jsp, 而是通过响应输出JSON格式字符串
+     * Tips: 作为Ajax与服务器交互后, 得到的不是整页HTML, 而是服务器处理后的数据
+     */
+    public void delete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = request.getParameter("id");
+        PrintWriter out = response.getWriter();
+        try {
+            paintingService.delete(Integer.parseInt(id));
+            // {"result":"ok"}
+            out.println("{\"result\":\"ok\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            out.println("{\"result\":\"" + e.getMessage() + "\"}");
         }
     }
 }

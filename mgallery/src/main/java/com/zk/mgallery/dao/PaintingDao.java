@@ -66,4 +66,8 @@ public class PaintingDao {
     public void update(Painting painting) {
         XmlDataSource.update(painting);
     }
+
+    public void delete(int id) {
+        XmlDataSource.delete(id);
+    }
 }

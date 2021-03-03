@@ -48,8 +48,26 @@ public class PaintingService {
         return p;
     }
 
-    public void update(Painting painting) {
-        paintingDao.update(painting);
+    /**
+     * 更新业务逻辑
+     * @param newPainting 新的油画数据
+     * @param isPreviewModified 是否修改Preview属性
+     */
+    public void update(Painting newPainting, Integer isPreviewModified) {
+        // 在原始数据基础上覆盖更新!!!
+        Painting oldPainting = findById(newPainting.getId());  // 通过findById从全局唯一的data里找到painting对象
+        oldPainting.setPname(newPainting.getPname());
+        oldPainting.setCategory(newPainting.getCategory());
+        oldPainting.setPrice(newPainting.getPrice());
+        oldPainting.setDescription(newPainting.getDescription());
+        if (isPreviewModified == 1) {
+            oldPainting.setPreview(newPainting.getPreview());
+        }
+        paintingDao.update(oldPainting);
+    }
+
+    public void delete(int id) {
+        paintingDao.delete(id);
     }
 
     public static void main(String[] args) {
