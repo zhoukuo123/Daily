@@ -1,6 +1,7 @@
 package com.zk.jdbc.hrapp;
 
 import com.zk.jdbc.hrapp.command.Command;
+import com.zk.jdbc.hrapp.command.PstmtQueryCommand;
 import com.zk.jdbc.hrapp.command.QueryCommand;
 
 import java.util.Scanner;
@@ -12,7 +13,7 @@ public class HumanResourceApplication {
         int cmd = in.nextInt();
         switch (cmd) {
             case 1: // 查询部门员工
-                Command command = new QueryCommand();
+                Command command = new PstmtQueryCommand();
                 command.execute();
                 break;
         }
