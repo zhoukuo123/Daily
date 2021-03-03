@@ -4,10 +4,7 @@ import com.sun.jndi.dns.DnsUrl;
 import com.zk.jdbc.common.DbUtils;
 import com.zk.jdbc.hrapp.entity.Employee;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -37,12 +34,16 @@ public class PaginationCommand implements Command {
                 String ename = rs.getString("ename");
                 float salary = rs.getFloat("salary");
                 String dname = rs.getString("dname");
+                Date hiredate = rs.getDate("hiredate");
+                // JDBC获取日期使用java.sql.Date, 其继承自java.util.Date
+                // 所以两者互相兼容
 
                 Employee emp = new Employee();
                 emp.setEno(eno);
                 emp.setEname(ename);
                 emp.setSalary(salary);
                 emp.setDname(dname);
+                emp.setHiredate(hiredate);
 
                 list.add(emp);
             }

@@ -41,6 +41,11 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.5</version>
+        </dependency>
     </dependencies>
 
     <build>
