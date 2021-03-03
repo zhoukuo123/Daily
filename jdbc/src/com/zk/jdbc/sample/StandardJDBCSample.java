@@ -13,7 +13,7 @@ public class StandardJDBCSample {
             Class.forName("com.mysql.cj.jdbc.Driver");
             // 2. 创建数据库连接
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/imooc?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serveTimezone=Asia/Shanghai",
+                    "jdbc:mysql://localhost:3306/imooc?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai",
                     "root", "zhoukuo"
             );
             // 3. 创建Statement对象
