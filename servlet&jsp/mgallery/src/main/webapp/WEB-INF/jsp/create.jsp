@@ -5,9 +5,9 @@
 <head>
     <meta charset="utf-8">
     <title>新增油画</title>
-    <link rel="stylesheet" type="text/css" href="css/create.css">
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/validation.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/create.css">
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/validation.js"></script>
     <script type="text/javascript">
         function checkSubmit() {
             var r1 = checkEmpty("#pname", "errPname");

@@ -5,9 +5,9 @@
 <head>
     <meta charset="utf-8">
     <title>作品更新</title>
-    <link rel="stylesheet" type="text/css" href="css/create.css">
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/validation.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/create.css">
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/validation.js"></script>
     <script type="text/javascript">
         <!-- 提交前表单校验 -->
         function checkSubmit() {
