@@ -230,4 +230,78 @@ public class MyBatisTestor {
             MyBatisUtils.closeSession(sqlSession);
         }
     }
+
+    @Test
+    public void testDynamicSQL() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Map<String, Integer> param = new HashMap<>();
+            param.put("categoryId", 44);
+            param.put("currentPrice", 500);
+
+            List<Goods> list = sqlSession.selectList("dynamicSQL", param);
+            for (Goods goods : list) {
+                System.out.println(goods.getTitle() + ":" + goods.getCurrentPrice());
+            }
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback(); // 回滚事务
+            }
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testLv1Cache() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 1603);
+            Goods goods1 = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods.hashCode() + ":" + goods1.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 1603);
+            sqlSession.commit(); // commit提交时对该namespace缓存强制清空
+            Goods goods1 = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods.hashCode() + ":" + goods1.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testLv2Cache() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 1603);
+            System.out.println(goods.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
 }
