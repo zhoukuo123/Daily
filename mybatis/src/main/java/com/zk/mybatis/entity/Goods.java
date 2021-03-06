@@ -1,5 +1,7 @@
 package com.zk.mybatis.entity;
 
+import java.util.List;
+
 public class Goods {
     private Integer goodsId;
     private String title;
@@ -9,6 +11,7 @@ public class Goods {
     private Float discount;
     private Integer isFreeDelivery; // 是否包邮, 1-包邮, 2-不包邮
     private Integer categoryId;
+    private List<GoodsDetail> goodsDetails;
 
     public Integer getGoodsId() {
         return goodsId;
@@ -72,5 +75,13 @@ public class Goods {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<GoodsDetail> getGoodsDetails() {
+        return goodsDetails;
+    }
+
+    public void setGoodsDetails(List<GoodsDetail> goodsDetails) {
+        this.goodsDetails = goodsDetails;
     }
 }

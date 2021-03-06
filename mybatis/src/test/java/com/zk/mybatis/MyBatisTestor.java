@@ -2,6 +2,7 @@ package com.zk.mybatis;
 
 import com.zk.mybatis.dto.GoodsDTO;
 import com.zk.mybatis.entity.Goods;
+import com.zk.mybatis.entity.GoodsDetail;
 import com.zk.mybatis.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -298,6 +299,38 @@ public class MyBatisTestor {
             sqlSession = MyBatisUtils.openSession();
             Goods goods = sqlSession.selectOne("goods.selectById", 1603);
             System.out.println(goods.hashCode());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testOneToMany() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<Goods> list = sqlSession.selectList("goods.selectOneToMany");
+            for (Goods goods : list) {
+                System.out.println(goods.getTitle() + ":" + goods.getGoodsDetails().size());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    @Test
+    public void testManyToOne() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<GoodsDetail> list = sqlSession.selectList("goodsDetail.selectManyToOne");
+            for (GoodsDetail goodsDetail : list) {
+                System.out.println(goodsDetail.getGdPicUrl() + ":" + goodsDetail.getGoods().getTitle());
+            }
         } catch (Exception e) {
             throw e;
         } finally {
