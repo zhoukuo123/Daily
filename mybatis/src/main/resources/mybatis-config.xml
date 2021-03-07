@@ -4,32 +4,37 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <settings>
-<!--        goods_id ==> goodsId 驼峰命名转换 -->
+        <!--        goods_id ==> goodsId 驼峰命名转换 -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
-<!--    启用Pagehelper分页插件-->
+    <!--    启用Pagehelper分页插件-->
     <plugins>
         <plugin interceptor="com.github.pagehelper.PageInterceptor">
-<!--            设置数据库类型-->
+            <!--            设置数据库类型-->
             <property name="helperDialect" value="mysql"/>
-<!--            开启分页合理化-->
+            <!--            开启分页合理化-->
             <property name="reasonable" value="true"/>
         </plugin>
     </plugins>
-    
-<!--    default 设置默认指向的数据库-->
+
+    <!--    default 设置默认指向的数据库-->
     <environments default="dev">
-<!--        配置环境, 不同的环境不同的id名字-->
+        <!--        配置环境, 不同的环境不同的id名字-->
         <environment id="dev">
-<!--            采用JDBC方式对数据库事务进行commit/rollback-->
+            <!--            采用JDBC方式对数据库事务进行commit/rollback-->
             <transactionManager type="JDBC"></transactionManager>
-<!--            采用连接池方式管理数据库连接-->
-            <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/babytun?useUnicode=true&amp;characterEncoding=UTF-8"/>
-                <property name="username" value="root"/>
+            <!--            采用连接池方式管理数据库连接-->
+            <!--            <dataSource type="POOLED">-->
+            <dataSource type="com.zk.mybatis.datasource.C3P0DataSourceFactory">
+                <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+                <property name="jdbcUrl"
+                          value="jdbc:mysql://localhost:3306/babytun?useUnicode=true&amp;characterEncoding=UTF-8"/>
+                <property name="user" value="root"/>
                 <property name="password" value="zhoukuo"/>
+                <property name="initialPoolSize" value="5"/>
+                <property name="maxPoolSize" value="20"/>
+                <property name="minPoolSize" value="5"/>
             </dataSource>
         </environment>
 
@@ -39,7 +44,8 @@
             <!--            采用连接池方式管理数据库连接-->
             <dataSource type="POLLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://192.168.1.155:3306/babytun?useUnicode=true&amp;characterEncoding=UTF-8"/>
+                <property name="url"
+                          value="jdbc:mysql://192.168.1.155:3306/babytun?useUnicode=true&amp;characterEncoding=UTF-8"/>
                 <property name="username" value="root"/>
                 <property name="password" value="zhoukuo"/>
             </dataSource>

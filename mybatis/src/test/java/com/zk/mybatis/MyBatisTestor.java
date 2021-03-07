@@ -356,8 +356,10 @@ public class MyBatisTestor {
             System.out.println("开始行号:" + page.getStartRow());
             System.out.println("结束行号:" + page.getEndRow());
             System.out.println("当前页码:" + page.getPageNum());
-            List<Goods> data = page.getResult();
-
+            List<Goods> data = page.getResult(); // 当前页数据
+            for (Goods goods : data) {
+                System.out.println(goods.getTitle());
+            }
         } catch (Exception e) {
             throw e;
         } finally {
