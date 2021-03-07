@@ -1,5 +1,7 @@
 package com.zk.mybatis;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.zk.mybatis.dto.GoodsDTO;
 import com.zk.mybatis.entity.Goods;
 import com.zk.mybatis.entity.GoodsDetail;
@@ -331,6 +333,31 @@ public class MyBatisTestor {
             for (GoodsDetail goodsDetail : list) {
                 System.out.println(goodsDetail.getGdPicUrl() + ":" + goodsDetail.getGoods().getTitle());
             }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    /**
+     * PageHelper分页查询
+     */
+    @Test
+    public void testSelectPage() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            // startPage方法会自动将下一次查询进行分页
+            PageHelper.startPage(2, 10);
+            Page<Goods> page = (Page) sqlSession.selectList("goods.selectPage");
+            System.out.println("总页数:" + page.getPages());
+            System.out.println("总记录数:" + page.getTotal());
+            System.out.println("开始行号:" + page.getStartRow());
+            System.out.println("结束行号:" + page.getEndRow());
+            System.out.println("当前页码:" + page.getPageNum());
+            List<Goods> data = page.getResult();
+
         } catch (Exception e) {
             throw e;
         } finally {
