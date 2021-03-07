@@ -47,6 +47,13 @@
             <version>2.3.30</version>
         </dependency>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+<!--            依赖只参与编译测试, 不进行发布-->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.2.5</version>
@@ -65,6 +72,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
+<!--            只参与maven test, 不进行发布-->
             <scope>test</scope>
         </dependency>
     </dependencies>

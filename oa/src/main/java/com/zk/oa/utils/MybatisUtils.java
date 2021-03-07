@@ -37,4 +37,23 @@ public class MybatisUtils {
             sqlSession.close();
         }
     }
+
+    /**
+     * 执行INSERT/UPDATE/DELETE写操作SQL
+     * @param func 要执行的写操作代码块
+     * @return 写操作后返回的结果
+     */
+    public static Object executeUpdate(Function<SqlSession, Object> func) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(false);
+        try {
+            Object obj = func.apply(sqlSession);
+            sqlSession.commit();
+            return obj;
+        } catch (RuntimeException e) {
+            sqlSession.rollback();
+            throw e;
+        } finally {
+            sqlSession.close();
+        }
+    }
 }

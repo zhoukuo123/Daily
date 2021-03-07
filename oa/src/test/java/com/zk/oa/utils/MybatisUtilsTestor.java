@@ -14,4 +14,12 @@ public class MybatisUtilsTestor {
         });
         System.out.println(string);
     }
+
+    @Test
+    public void testcase2() {
+        String string = (String) MybatisUtils.executeQuery(sqlSession ->
+                sqlSession.selectOne("test.sample")
+        );
+        System.out.println(string);
+    }
 }
