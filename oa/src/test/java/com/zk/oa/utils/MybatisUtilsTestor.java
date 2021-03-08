@@ -1,9 +1,6 @@
 package com.zk.oa.utils;
 
-import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
-
-import java.util.function.Function;
 
 public class MybatisUtilsTestor {
     @Test
