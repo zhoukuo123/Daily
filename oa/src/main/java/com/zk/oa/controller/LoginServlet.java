@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +30,12 @@ public class LoginServlet extends HttpServlet {
         Map<String , Object> result = new HashMap<>();
         try {
             User user = userService.checkLogin(username, password);
+            HttpSession session = request.getSession();
+            // 向session存入登录用户信息, 属性名: login_user
+            session.setAttribute("login_user", user);
             result.put("code", "0");
             result.put("message", "success");
-//            String jsonString = JSON.toJSONString(user);
+            result.put("redirect_url", "/index");
         } catch (BusinessException e) {
             logger.error(e.getMessage(), e);
             result.put("code", e.getCode());

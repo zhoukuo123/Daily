@@ -1,7 +1,10 @@
 package com.zk.oa.service;
 
+import com.zk.oa.entity.Node;
 import com.zk.oa.entity.User;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -20,5 +23,11 @@ public class UserServiceTest {
     @Test
     public void checkLogin3() {
         userService.checkLogin("m8", "test");
+    }
+
+    @Test
+    public void selectNodeByUserId() {
+        List<Node> nodes = userService.selectNodeByUserId(2L);
+        System.out.println(nodes);
     }
 }
