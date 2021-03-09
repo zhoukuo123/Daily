@@ -15,9 +15,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 // JUnit单元测试类
 public class MyBatisTestor {
@@ -361,6 +359,104 @@ public class MyBatisTestor {
                 System.out.println(goods.getTitle());
             }
         } catch (Exception e) {
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    /**
+     * 批量插入测试
+     */
+    @Test
+    public void testBatchInsert() {
+        SqlSession sqlSession = null;
+        try {
+            long st = new Date().getTime();
+            sqlSession = MyBatisUtils.openSession();
+            List<Goods> list = new ArrayList<>();
+            for (int i = 0; i < 10000; i++) {
+                Goods goods = new Goods();
+                goods.setTitle("测试商品");
+                goods.setSubTitle("测试子标题");
+                goods.setOriginalCost(200f);
+                goods.setCurrentPrice(100f);
+                goods.setDiscount(0.5f);
+                goods.setIsFreeDelivery(1);
+                goods.setCategoryId(43);
+
+                list.add(goods);
+            }
+            sqlSession.insert("goods.batchInsert", list);
+            sqlSession.commit(); // 提交事务数据
+            long et = new Date().getTime();
+            System.out.println("执行时间:" + (et - st) + "毫秒");
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback(); // 回滚事务
+            }
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    /**
+     * 10000次数据插入对比测试用例
+     */
+    @Test
+    public void testInsert1() {
+        SqlSession sqlSession = null;
+        try {
+            long st = new Date().getTime();
+            sqlSession = MyBatisUtils.openSession();
+            for (int i = 0; i < 10000; i++) {
+                Goods goods = new Goods();
+                goods.setTitle("测试商品");
+                goods.setSubTitle("测试子标题");
+                goods.setOriginalCost(200f);
+                goods.setCurrentPrice(100f);
+                goods.setDiscount(0.5f);
+                goods.setIsFreeDelivery(1);
+                goods.setCategoryId(43);
+
+                sqlSession.insert("goods.insert", goods);
+            }
+
+            sqlSession.commit(); // 提交事务数据
+            long et = new Date().getTime();
+            System.out.println("执行时间:" + (et - st) + "毫秒");
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback(); // 回滚事务
+            }
+            throw e;
+        } finally {
+            MyBatisUtils.closeSession(sqlSession);
+        }
+    }
+
+    /**
+     * 批量删除测试
+     */
+    @Test
+    public void testBatchDelete() {
+        SqlSession sqlSession = null;
+        try {
+            long st = new Date().getTime();
+            sqlSession = MyBatisUtils.openSession();
+            List<Integer> list = new ArrayList<>();
+            list.add(1920);
+            list.add(1921);
+            list.add(1922);
+            sqlSession.delete("goods.batchDelete", list);
+            sqlSession.commit(); // 提交事务数据
+            long et = new Date().getTime();
+            System.out.println("执行时间:" + (et - st) + "毫秒");
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback(); // 回滚事务
+            }
             throw e;
         } finally {
             MyBatisUtils.closeSession(sqlSession);

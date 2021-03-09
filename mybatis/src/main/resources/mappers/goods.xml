@@ -88,9 +88,9 @@
     <insert id="insert" parameterType="com.zk.mybatis.entity.Goods" flushCache="true">
         insert into t_goods(title, sub_title, original_cost, current_price, discount, is_free_delivery, category_id)
         value(#{title}, #{subTitle}, #{originalCost}, #{currentPrice}, #{discount}, #{isFreeDelivery}, #{categoryId})
-        <selectKey resultType="integer" keyProperty="goodsId" order="AFTER">
-            select last_insert_id()
-        </selectKey>
+<!--        <selectKey resultType="integer" keyProperty="goodsId" order="AFTER">-->
+<!--            select last_insert_id()-->
+<!--        </selectKey>-->
     </insert>
 
     <update id="update" parameterType="com.zk.mybatis.entity.Goods">
@@ -105,6 +105,7 @@
         where goods_id = #{goodsId}
     </update>
 
+<!--    delete from t_goods where goods_id in (1920, 1921)-->
     <delete id="delete" parameterType="integer">
         delete
         from t_goods
@@ -158,4 +159,26 @@
         from t_goods
         where current_price &lt; 1000
     </select>
+
+<!--    INSERT INTO table-->
+<!--    values("a", "a1", "a2"), ("b", "b1", "b2"), (...)-->
+<!--    批量插入数据的局限:
+            1. 无法获得插入数据的id
+            2. 批量生成的SQL太长, 可能会被服务器拒绝(可以通过分段执行解决 例如一千万条数据可以变成一千个一万条)
+-->
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into t_goods(title, sub_title, original_cost, current_price, discount, is_free_delivery, category_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.title}, #{item.subTitle}, #{item.originalCost}, #{item.currentPrice}, #{item.discount}, #{item.isFreeDelivery}, #{item.categoryId})
+        </foreach>
+    </insert>
+
+<!--    delete from t_goods where goods_id in (1, 10)-->
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete from t_goods where goods_id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
 </mapper>
