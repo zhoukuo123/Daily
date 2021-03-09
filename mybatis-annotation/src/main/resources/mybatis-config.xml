@@ -19,4 +19,9 @@
             </dataSource>
         </environment>
     </environments>
+
+    <mappers>
+<!--        <mapper class="com.zk.mybatis.dao.GoodsDAO"/>-->
+        <package name="com.zk.mybatis.dao"/>
+    </mappers>
 </configuration>
