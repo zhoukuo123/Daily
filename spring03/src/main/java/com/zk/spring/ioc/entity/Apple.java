@@ -1,4 +1,4 @@
-package ioc.entity;
+package com.zk.spring.ioc.entity;
 
 public class Apple {
     private String title;

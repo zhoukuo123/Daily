@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="sweetApple" class="com.zk.spring.ioc.entity.Apple">
+        <!-- IoC容器自动利用反射机制在运行时调用setXXX方法为属性赋值 -->
+        <property name="title" value="红富士"/>
+        <property name="origin" value="欧洲"/>
+        <property name="color" value="红色"/>
+    </bean>
+
+    <bean id="lily" class="com.zk.spring.ioc.entity.Child">
+        <property name="name" value="lily"/>
+        <property name="apple" ref="sweetApple"/>
+    </bean>
+</beans>
