@@ -7,6 +7,7 @@ import com.zk.spring.ioc.entity.Apple;
  */
 public class AppleFactoryInstance {
     public Apple createSweetApple() {
+        // logger.info("")
         Apple apple = new Apple();
         apple.setTitle("红富士");
         apple.setOrigin("欧洲");
