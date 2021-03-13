@@ -19,4 +19,16 @@
         <property name="origin" value="中国"/>
         <property name="color" value="黄色"/>
     </bean>
+    <bean id="lily" class="com.zk.spring.ioc.entity.Child">
+        <property name="name" value="lily"/>
+        <property name="apple" ref="sweetApple"/>
+    </bean>
+    <bean id="andy" class="com.zk.spring.ioc.entity.Child">
+        <property name="name" value="andy"/>
+        <property name="apple" ref="sourApple"/>
+    </bean>
+    <bean id="luna" class="com.zk.spring.ioc.entity.Child">
+        <property name="name" value="luna"/>
+        <property name="apple" ref="softApple"/>
+    </bean>
 </beans>
