@@ -11,6 +11,11 @@
 
     <bean id="lily" class="com.zk.spring.ioc.entity.Child">
         <property name="name" value="lily"/>
+        <!-- 利用ref注入依赖对象 -->
         <property name="apple" ref="sweetApple"/>
+    </bean>
+    <bean id="andy" class="com.zk.spring.ioc.entity.Child">
+        <constructor-arg name="name" value="andy"/>
+        <constructor-arg name="apple" ref="sweetApple"/>
     </bean>
 </beans>

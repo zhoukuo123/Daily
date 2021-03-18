@@ -14,7 +14,8 @@ public class DruidDataSourceFactory extends UnpooledDataSourceFactory {
     @Override
     public DataSource getDataSource() {
         try {
-            ((DruidDataSource) this.dataSource).init(); // 初始化Druid数据源
+            // 初始化Druid数据源
+            ((DruidDataSource) this.dataSource).init();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

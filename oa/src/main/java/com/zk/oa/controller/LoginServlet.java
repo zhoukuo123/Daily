@@ -22,6 +22,7 @@ public class LoginServlet extends HttpServlet {
     Logger logger = LoggerFactory.getLogger(LoginServlet.class);
     private UserService userService = new UserService();
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
@@ -49,6 +50,7 @@ public class LoginServlet extends HttpServlet {
         response.getWriter().println(jsonString);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

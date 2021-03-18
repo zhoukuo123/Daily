@@ -17,10 +17,12 @@ import java.util.List;
 public class IndexServlet extends HttpServlet {
     private UserService userService = new UserService();
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("login_user");
