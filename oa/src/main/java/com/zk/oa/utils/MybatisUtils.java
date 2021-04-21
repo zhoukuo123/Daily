@@ -10,10 +10,10 @@ import java.io.Reader;
 import java.util.function.Function;
 
 public class MybatisUtils {
-    private static SqlSessionFactory sqlSessionFactory = null;
+    private static SqlSessionFactory sqlSessionFactory;
     // 利用静态块在初始化类时实例化sqlSessionFactory
     static {
-        Reader reader = null;
+        Reader reader;
         try {
             reader = Resources.getResourceAsReader("mybatis-config.xml");
             sqlSessionFactory =  new SqlSessionFactoryBuilder().build(reader);
