@@ -14,5 +14,7 @@ public class SpringApplication {
         UserDao userDao1 = context.getBean("userDao", UserDao.class);
         UserDao userDao2 = context.getBean("userDao", UserDao.class);
         UserDao userDao3 = context.getBean("userDao", UserDao.class);
+
+        ((ClassPathXmlApplicationContext) context).registerShutdownHook();
     }
 }
