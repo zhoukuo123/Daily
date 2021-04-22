@@ -39,7 +39,8 @@ public class ClassPathXmlApplicationContext implements ApplicationContext {
                     String setMethodName = "set" + propName.substring(0, 1).toUpperCase() + propName.substring(1);
                     System.out.println("准备执行" + setMethodName + "方法注入数据");
                     Method setMethod = c.getMethod(setMethodName, String.class);
-                    setMethod.invoke(obj, propValue); // 通过setter方法注入数据
+                    // 通过setter方法注入数据
+                    setMethod.invoke(obj, propValue);
                 }
                 iocContainer.put(id, obj);
             }
