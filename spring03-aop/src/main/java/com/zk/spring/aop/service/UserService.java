@@ -9,10 +9,11 @@ import javax.annotation.Resource;
  * @author CoderZk
  */
 @Service
-public class UserService {
+public class UserService implements IUserService {
     @Resource
     private UserDao userDao;
 
+    @Override
     public void createUser() {
         try {
             Thread.sleep(3000);
@@ -23,6 +24,7 @@ public class UserService {
         userDao.insert();
     }
 
+    @Override
     public String generateRandomPassword(String type, Integer length) {
         System.out.println("按" + type + "方式生成" + length + "位随机密码");
         return "Zxcquei1";

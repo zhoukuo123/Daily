@@ -23,7 +23,7 @@ public class ProxyInvocationHandler implements InvocationHandler {
     }
 
     /**
-     * 在invoke()方法对目标方法进行增强
+     * 在invoke()方法中对目标方法进行增强
      *
      * @param proxy  代理类对象
      * @param method 目标方法对象
@@ -47,5 +47,12 @@ public class ProxyInvocationHandler implements InvocationHandler {
                 userService.getClass().getInterfaces(),
                 invocationHandler);
         userServiceProxy.createUser();
+
+        // JDK动态代理, 必须实现接口才可以运行
+        EmployeeService employeeService = new EmployeeServiceImpl();
+        EmployeeService employeeServiceProxy = (EmployeeService) Proxy.newProxyInstance(employeeService.getClass().getClassLoader(),
+                employeeService.getClass().getInterfaces(),
+                new ProxyInvocationHandler(employeeService));
+        employeeServiceProxy.createEmployee();
     }
 }
