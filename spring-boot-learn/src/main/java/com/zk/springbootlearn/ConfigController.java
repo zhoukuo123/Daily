@@ -12,10 +12,10 @@ import javax.annotation.Resource;
 @RestController
 public class ConfigController {
     @Resource
-    SchoolConfig schoolConfig;
+    private SchoolConfig schoolConfig;
 
     @GetMapping("/gradefromconfig")
     public String gradeClass() {
-        return "年级: " + schoolConfig.grade + " 班级: " + schoolConfig.classnum;
+        return "年级: " + schoolConfig.getGrade() + " 班级: " + schoolConfig.getClassnum();
     }
 }

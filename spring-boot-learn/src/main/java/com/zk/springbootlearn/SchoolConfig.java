@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "school")
 public class SchoolConfig {
-    Integer grade;
+    private Integer grade;
 
-    Integer classnum;
+    private Integer classnum;
 
     public Integer getGrade() {
         return grade;

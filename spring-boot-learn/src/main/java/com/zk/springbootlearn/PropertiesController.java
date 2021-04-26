@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PropertiesController {
     @Value("${school.grade}")
-    Integer grade;
+    private Integer grade;
 
     @Value("${school.classnum}")
-    Integer classnum;
+    private Integer classnum;
 
     @GetMapping("/gradeclass")
     public String gradeClass() {
