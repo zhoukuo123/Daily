@@ -21,4 +21,9 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
     <mvc:default-servlet-handler/>
+
+    <mvc:cors>
+        <mvc:mapping path="/restful/**" allowed-origins="http://localhost:8080, https://www.baidu.com"
+                     max-age="3600"/>
+    </mvc:cors>
 </beans>
