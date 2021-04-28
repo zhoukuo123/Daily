@@ -2,7 +2,6 @@ package com.zk.controller;
 
 import com.zk.pojo.Stu;
 import com.zk.service.StuService;
-import com.zk.service.impl.StuServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
