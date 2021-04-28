@@ -1,5 +1,6 @@
 package com.zk.service.impl;
 
+import com.zk.enums.Sex;
 import com.zk.mapper.StuMapper;
 import com.zk.mapper.UsersMapper;
 import com.zk.pojo.Stu;
@@ -7,6 +8,7 @@ import com.zk.pojo.Users;
 import com.zk.pojo.bo.UserBO;
 import com.zk.service.StuService;
 import com.zk.service.UserService;
+import com.zk.utils.DateUtil;
 import com.zk.utils.MD5Utils;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @author CoderZk
@@ -51,7 +54,13 @@ public class UserServiceImpl implements UserService {
         user.setNickname(userBO.getUsername());
         // 默认头像
         user.setFace(USER_FACE);
-        user.setBirthday();
+        // 设置默认生日
+        user.setBirthday(DateUtil.stringToDate("1900-01-01"));
+        // 默认性别为 保密
+        user.setSex(Sex.secret.type);
+
+        user.setCreatedTime(new Date());
+        user.setUpdatedTime(new Date());
         return null;
     }
 }
