@@ -12,14 +12,14 @@ import javax.annotation.Resource;
 /**
  * @author CoderZk
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = Application.class)
 public class TransTest {
 
     @Resource
     private TestTransService testTransService;
 
-    @Test
+//    @Test
     public void myTest() {
         testTransService.testPropagationTrans();
     }

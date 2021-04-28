@@ -1,0 +1,57 @@
+package com.zk.service.impl;
+
+import com.zk.mapper.StuMapper;
+import com.zk.mapper.UsersMapper;
+import com.zk.pojo.Stu;
+import com.zk.pojo.Users;
+import com.zk.pojo.bo.UserBO;
+import com.zk.service.StuService;
+import com.zk.service.UserService;
+import com.zk.utils.MD5Utils;
+import org.apache.catalina.User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
+
+import javax.annotation.Resource;
+
+/**
+ * @author CoderZk
+ */
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Resource
+    private UsersMapper usersMapper;
+
+    private static final String USER_FACE = "http://122.152.205.72:88/group1/M00/00/05/CpoxxFw_8_qAIlFXAAAcIhVPdSg994.png";
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public boolean queryUsernameIsExist(String username) {
+        Example userExample = new Example(Users.class);
+        Example.Criteria userCriteria = userExample.createCriteria();
+        userCriteria.andEqualTo("username", username);
+
+        return usersMapper.selectOneByExample(userExample) != null;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public Users createUser(UserBO userBO) {
+        Users user = new Users();
+        user.setUsername(userBO.getUsername());
+        try {
+            user.setPassword(MD5Utils.getMD5Str(userBO.getPassword()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 默认用户昵称同用户名
+        user.setNickname(userBO.getUsername());
+        // 默认头像
+        user.setFace(USER_FACE);
+        user.setBirthday();
+        return null;
+    }
+}
