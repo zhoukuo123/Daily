@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author CoderZk
  */
-@Api(value = "注册登陆", tags = {"用于注册登陆的相关接口"})
+@Api(value = "注册登录", tags = {"用于注册登录的相关接口"})
 @RestController
 @RequestMapping("/passport")
 public class PassportController {
@@ -73,13 +73,14 @@ public class PassportController {
 
         userResult = setNullProperty(userResult);
 
+        // 把用户信息放入cookie中, 前端获取后显示为登录时的状态, 并且刷新也不会丢失登录状态
         CookieUtils.setCookie(request, response, "user",
                 JsonUtils.objectToJson(userResult), true);
 
         return JSONResult.ok();
     }
 
-    @ApiOperation(value = "用户登陆", notes = "用户登陆", httpMethod = "POST")
+    @ApiOperation(value = "用户登录", notes = "用户登录", httpMethod = "POST")
     @PostMapping("/login")
     public JSONResult login(@RequestBody UserBO userBO,
                             HttpServletRequest request,
@@ -100,8 +101,10 @@ public class PassportController {
             return JSONResult.errorMsg("用户名或密码不正确");
         }
 
+        // 信息脱敏
         userResult = setNullProperty(userResult);
 
+        // 把用户信息放入cookie中, 前端获取后显示为登录时的状态, 并且刷新也不会丢失登录状态
         CookieUtils.setCookie(request, response, "user",
                 JsonUtils.objectToJson(userResult), true);
 
