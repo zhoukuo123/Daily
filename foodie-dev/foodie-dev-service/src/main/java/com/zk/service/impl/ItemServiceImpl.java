@@ -7,7 +7,9 @@ import com.zk.mapper.*;
 import com.zk.pojo.*;
 import com.zk.pojo.vo.CommentLevelCountsVO;
 import com.zk.pojo.vo.ItemCommentVO;
+import com.zk.pojo.vo.SearchItemsVO;
 import com.zk.service.ItemService;
+import com.zk.utils.DesensitizationUtil;
 import com.zk.utils.PagedGridResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -113,6 +115,7 @@ public class ItemServiceImpl implements ItemService {
         map.put("level", level);
 
         /**
+         * 分页 PageHelper
          * page: 第几页
          * pageSize: 每页显示条数
          * 都是由前端提供
@@ -121,9 +124,21 @@ public class ItemServiceImpl implements ItemService {
 
         List<ItemCommentVO> list = itemsMapperCustom.queryItemComments(map);
 
+        // 敏感信息脱敏
+        for (ItemCommentVO vo : list) {
+            vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname()));
+        }
+
         return setterPagedGrid(list, page);
     }
 
+    /**
+     * 分页信息封装, 以提供给前端使用
+     *
+     * @param list 每页的记录数据data
+     * @param page 当前页数
+     * @return PagedGridResult
+     */
     private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
         PageInfo<?> pageList = new PageInfo<>(list);
         PagedGridResult grid = new PagedGridResult();
@@ -132,5 +147,20 @@ public class ItemServiceImpl implements ItemService {
         grid.setTotal(pageList.getPages());
         grid.setRecords(pageList.getTotal());
         return grid;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItems(String keywords, String sort,
+                                       Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("keywords", keywords);
+        map.put("sort", sort);
+
+        PageHelper.startPage(page, pageSize);
+
+        List<SearchItemsVO> list = itemsMapperCustom.searchItems(map);
+
+        return setterPagedGrid(list, page);
     }
 }

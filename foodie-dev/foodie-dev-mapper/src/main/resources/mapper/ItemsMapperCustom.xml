@@ -13,9 +13,40 @@
         join
         users u
         on ic.user_id = u.id
-        where ic.item_id = #{paramsMap.item_id}
+        where ic.item_id = #{paramsMap.itemId}
         <if test=" paramsMap.level != null and paramsMap.level != '' ">
             and ic.comment_level = #{paramsMap.level}
         </if>
     </select>
+
+    <select id="searchItems" parameterType="Map" resultType="com.zk.pojo.vo.SearchItemsVO">
+        select i.id as itemId,
+        i.item_name as itemName,
+        i.sell_counts as sellCounts,
+        ii.url as imgUrl,
+        MIN(s.price_discount) as price
+        from items i
+        left join items_img ii on i.id = ii.item_id
+        left join items_spec s on i.id = s.item_id
+        where ii.is_main = 1
+        <if test=" paramsMap.keywords != null and paramsMap.keywords != '' ">
+            and i.item_name like '%${paramsMap.keywords}%'
+        </if>
+        group by i.id, i.item_name, i.sell_counts, ii.url
+        order by
+        <choose>
+            <when test=" paramsMap.sort == 'c'.toString() ">
+                i.sell_counts desc
+            </when>
+            <when test=" paramsMap.sort == 'p'.toString() ">
+                price asc
+            </when>
+            <otherwise>
+                i.item_name asc
+            </otherwise>
+        </choose>
+    </select>
+    <!--              k: 默认, 代表默认排序, 根据name-->
+    <!--              c: 根据销量排序-->
+    <!--              p: 根据价格排序-->
 </mapper>
