@@ -6,10 +6,19 @@ package com.zk.pojo.vo;
 public class ShopcartVO {
     private String itemId;
     private String itemImgUrl;
+    private String itemName;
     private String specId;
     private String specName;
     private String priceDiscount;
     private String priceNormal;
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
 
     public String getItemId() {
         return itemId;

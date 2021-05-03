@@ -6,8 +6,18 @@ package com.zk.pojo.bo;
 public class ShopcartBO {
     private String itemId;
     private String itemImgUrl;
+    private String itemName;
     private String specId;
     private String specName;
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
     private Integer buyCounts;
     private String priceDiscount;
     private String priceNormal;
@@ -73,6 +83,7 @@ public class ShopcartBO {
         return "ShopcartBO{" +
                 "itemId='" + itemId + '\'' +
                 ", itemImgUrl='" + itemImgUrl + '\'' +
+                ", itemName='" + itemName + '\'' +
                 ", specId='" + specId + '\'' +
                 ", specName='" + specName + '\'' +
                 ", buyCounts=" + buyCounts +
