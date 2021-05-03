@@ -77,6 +77,9 @@ public class PassportController {
         CookieUtils.setCookie(request, response, "user",
                 JsonUtils.objectToJson(userResult), true);
 
+        // TODO 生成用户token, 存入redis会话
+        // TODO 同步购物车数据
+
         return JSONResult.ok();
     }
 
@@ -107,6 +110,9 @@ public class PassportController {
         // 把用户信息放入cookie中, 前端获取后显示为登录时的状态, 并且刷新也不会丢失登录状态
         CookieUtils.setCookie(request, response, "user",
                 JsonUtils.objectToJson(userResult), true);
+
+        // TODO 生成用户token, 存入redis会话
+        // TODO 同步购物车数据
 
         return JSONResult.ok(userResult);
     }

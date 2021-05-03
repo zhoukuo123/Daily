@@ -49,4 +49,49 @@
     <!--              k: 默认, 代表默认排序, 根据name-->
     <!--              c: 根据销量排序-->
     <!--              p: 根据价格排序-->
+
+    <select id="searchItemsByThirdCat" parameterType="Map" resultType="com.zk.pojo.vo.SearchItemsVO">
+        select i.id as itemId,
+        i.item_name as itemName,
+        i.sell_counts as sellCounts,
+        ii.url as imgUrl,
+        MIN(s.price_discount) as price
+        from items i
+        left join items_img ii on i.id = ii.item_id
+        left join items_spec s on i.id = s.item_id
+        where ii.is_main = 1
+        and i.cat_id = #{paramsMap.catId}
+        group by i.id, i.item_name, i.sell_counts, ii.url
+        order by
+        <choose>
+            <when test=" paramsMap.sort == &quot;c&quot; ">
+                i.sell_counts desc
+            </when>
+            <when test=" paramsMap.sort == &quot;p&quot; ">
+                price asc
+            </when>
+            <otherwise>
+                i.item_name asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryItemsBySpecIds" parameterType="List" resultType="com.zk.pojo.vo.ShopcartVO">
+        select i.id as itemId,
+        ii.url as itemImgUrl,
+        i.item_name as itemName,
+        s.id as specId,
+        s.name as specName,
+        s.price_discount as priceDiscount,
+        s.price_normal as priceNormal
+        from items i
+        left join items_img ii on i.id = ii.item_id
+        left join items_spec s on i.id = s.item_id
+        where ii.is_main = 1
+        and s.id in
+        <foreach collection="paramsList" index="index" item="specId" open="(" separator="," close=")">
+            #{specId}
+        </foreach>
+    </select>
+    <!--                 ('3', '2', '1')-->
 </mapper>
