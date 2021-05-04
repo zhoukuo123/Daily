@@ -1,6 +1,7 @@
 package com.zk.service;
 
 import com.zk.pojo.bo.SubmitOrderBO;
+import com.zk.pojo.vo.OrderVO;
 
 /**
  * @author CoderZk
@@ -11,5 +12,13 @@ public interface OrderService {
      *
      * @param submitOrderBO
      */
-    void createOrder(SubmitOrderBO submitOrderBO);
+    OrderVO createOrder(SubmitOrderBO submitOrderBO);
+
+    /**
+     * 修改订单状态
+     *
+     * @param orderId
+     * @param orderStatus
+     */
+    void updateOrderStatus(String orderId, Integer orderStatus);
 }
