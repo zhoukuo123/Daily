@@ -2,6 +2,8 @@ package com.zk.controller;
 
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
+
 /**
  * @author CoderZk
  */
@@ -21,4 +23,12 @@ public class BaseController {
     //                       |-> 回调通知的url
     // 支付中心是部署到云服务器上的, 回调通知时, 无法访问到本地的URL, 需要内网穿透
     String payReturnUrl = "http://localhost:8088/orders/notifyMerchantOrderPaid";
+
+    // 用户上传头像的位置
+    public static final String IMAGE_USER_FACE_LOCATION = File.separator + "home" +
+            File.separator + "linux" +
+            File.separator + "images" +
+            File.separator + "foodie" +
+            File.separator + "faces";
+
 }
