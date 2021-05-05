@@ -19,5 +19,6 @@ public class BaseController {
 
     // 微信支付成功 -> 支付中心 -> 天天吃货平台
     //                       |-> 回调通知的url
+    // 支付中心是部署到云服务器上的, 回调通知时, 无法访问到本地的URL, 需要内网穿透
     String payReturnUrl = "http://localhost:8088/orders/notifyMerchantOrderPaid";
 }

@@ -2,6 +2,7 @@ package com.zk.controller;
 
 import com.zk.enums.OrderStatusEnum;
 import com.zk.enums.PayMethod;
+import com.zk.pojo.OrderStatus;
 import com.zk.pojo.bo.SubmitOrderBO;
 import com.zk.pojo.vo.MerchantOrdersVO;
 import com.zk.pojo.vo.OrderVO;
@@ -11,10 +12,7 @@ import com.zk.utils.JSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -58,6 +56,7 @@ public class OrdersController extends BaseController {
 
         // 3. 向支付中心发送当前订单, 用于保存支付中心的订单数据
         MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();
+        // 设置支付中心回调天天吃货的url
         merchantOrdersVO.setReturnUrl(payReturnUrl);
 
         // 为了方便测试购买, 所以所有的支付金额都统一改为1分钱
@@ -81,9 +80,21 @@ public class OrdersController extends BaseController {
         return JSONResult.ok(orderId);
     }
 
+    /**
+     * 支付中心回调通知订单已支付, 设置订单状态为已支付
+     *
+     * @param merchantOrderId
+     * @return
+     */
     @PostMapping("/notifyMerchantOrderPaid")
     public Integer notifyMerchantOrderPaid(String merchantOrderId) {
         orderService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_DELIVER.type);
         return HttpStatus.OK.value();
+    }
+
+    @PostMapping("/getPaidOrderInfo")
+    public JSONResult getPaidOrderInfo(@RequestParam String orderId) {
+        OrderStatus orderStatus = orderService.queryOrderStatusInfo(orderId);
+        return JSONResult.ok(orderStatus);
     }
 }
