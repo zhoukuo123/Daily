@@ -10,7 +10,10 @@
         <result column="postAmount" property="postAmount"/>
         <result column="orderStatus" property="orderStatus"/>
 
-        <collection property="subOrderItemList" ofType="com.zk.pojo.vo.MySubOrderItemVO">
+        <collection property="subOrderItemList"
+                    select="getSubItems"
+                    column="orderId"
+                    ofType="com.zk.pojo.vo.MySubOrderItemVO">
             <result column="itemId" property="itemId"/>
             <result column="itemName" property="itemName"/>
             <result column="itemImg" property="itemImg"/>
@@ -21,8 +24,38 @@
         </collection>
     </resultMap>
 
-
     <select id="queryMyOrders" resultMap="myOrdersVO" parameterType="Map">
+        select o.id as orderId,
+        o.real_pay_amount as realPayAmount,
+        o.post_amount as postAmount,
+        o.pay_method as payMethod,
+        o.created_time as createTime,
+        os.order_status as orderStatus
+        from orders o
+        left join order_items oi on o.id = oi.order_id
+        left join order_status os on o.id = os.order_id
+        where o.user_id = #{paramsMap.userId}
+        and o.is_delete = 0
+        <if test="paramsMap.orderStatus != null">
+            and os.order_status = #{paramsMap.orderStatus}
+        </if>
+        order by o.updated_time asc
+    </select>
+
+    <select id="getSubItems" parameterType="String" resultType="com.zk.pojo.vo.MySubOrderItemVO">
+        select oi.item_id        as itemId,
+               oi.item_name      as itemName,
+               oi.item_img       as itemImg,
+               oi.item_spec_id   as itemSpecId,
+               oi.item_spec_name as itemSpecName,
+               oi.price          as price,
+               oi.buy_counts     as buyCounts
+        from order_items oi
+        where oi.order_id = #{orderId}
+    </select>
+
+
+    <select id="queryMyOrdersDoNotUse" resultMap="myOrdersVO" parameterType="Map">
         select o.id as orderId,
         o.real_pay_amount as realPayAmount,
         o.post_amount as postAmount,
@@ -44,7 +77,7 @@
         <if test="paramsMap.orderStatus != null">
             and os.order_status = #{paramsMap.orderStatus}
         </if>
-        order by o.updated_time asc;
+        order by o.updated_time asc
     </select>
 
 
