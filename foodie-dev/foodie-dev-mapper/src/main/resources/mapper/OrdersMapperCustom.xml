@@ -32,7 +32,6 @@
         o.created_time as createTime,
         os.order_status as orderStatus
         from orders o
-        left join order_items oi on o.id = oi.order_id
         left join order_status os on o.id = os.order_id
         where o.user_id = #{paramsMap.userId}
         and o.is_delete = 0
