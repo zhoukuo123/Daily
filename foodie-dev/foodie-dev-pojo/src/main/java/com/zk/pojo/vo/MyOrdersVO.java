@@ -13,7 +13,7 @@ public class MyOrdersVO {
     private Integer realPayAmount;
     private Integer postAmount;
     private Integer payMethod;
-    private Date createTime;
+    private Date createdTime;
     private Integer isComment;
     private Integer orderStatus;
 
@@ -59,12 +59,12 @@ public class MyOrdersVO {
         this.payMethod = payMethod;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public Integer getOrderStatus() {

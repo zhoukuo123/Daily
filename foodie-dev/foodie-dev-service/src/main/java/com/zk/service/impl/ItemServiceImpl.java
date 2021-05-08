@@ -1,7 +1,6 @@
 package com.zk.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.zk.enums.CommentLevel;
 import com.zk.enums.YesOrNo;
 import com.zk.mapper.*;
@@ -11,6 +10,7 @@ import com.zk.pojo.vo.ItemCommentVO;
 import com.zk.pojo.vo.SearchItemsVO;
 import com.zk.pojo.vo.ShopcartVO;
 import com.zk.service.ItemService;
+import com.zk.service.impl.center.BaseService;
 import com.zk.utils.DesensitizationUtil;
 import com.zk.utils.PagedGridResult;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import java.util.*;
  * @author CoderZk
  */
 @Service
-public class ItemServiceImpl implements ItemService {
+public class ItemServiceImpl extends BaseService implements ItemService {
 
     @Resource
     private ItemsMapper itemsMapper;
@@ -130,23 +130,6 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return setterPagedGrid(list, page);
-    }
-
-    /**
-     * 分页信息封装, 以提供给前端使用
-     *
-     * @param list 每页的记录数据data
-     * @param page 当前页数
-     * @return PagedGridResult
-     */
-    private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
-        PageInfo<?> pageList = new PageInfo<>(list);
-        PagedGridResult grid = new PagedGridResult();
-        grid.setPage(page);
-        grid.setRows(list);
-        grid.setTotal(pageList.getPages());
-        grid.setRecords(pageList.getTotal());
-        return grid;
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
