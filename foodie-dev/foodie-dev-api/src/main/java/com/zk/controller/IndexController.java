@@ -8,9 +8,12 @@ import com.zk.pojo.vo.NewItemsVO;
 import com.zk.service.CarouselService;
 import com.zk.service.CategoryService;
 import com.zk.utils.JSONResult;
+import com.zk.utils.JsonUtils;
+import com.zk.utils.RedisOperator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,10 +36,27 @@ public class IndexController {
     @Resource
     private CategoryService categoryService;
 
+    @Resource
+    private RedisOperator redisOperator;
+
+    /**
+     * 1. 后台运营系统, 一旦广告(轮播图)发生更改, 就可以删除缓存, 然后重置
+     * 2. 定时重置, 比如每天凌晨三点重置
+     * 3. 每个轮播图都有可能是一个广告, 每个广告都会有一个过期时间, 过期了, 再重置
+     */
+
     @ApiOperation(value = "获取首页轮播图列表", notes = "获取首页轮播图列表", httpMethod = "GET")
     @GetMapping("/carousel")
     public JSONResult carousel() {
-        List<Carousel> list = carouselService.queryAll(YesOrNo.YES.type);
+
+        List<Carousel> list;
+        String carouselStr = redisOperator.get("carousel");
+        if (StringUtils.isBlank(carouselStr)) {
+            list = carouselService.queryAll(YesOrNo.YES.type);
+            redisOperator.set("carousel", JsonUtils.objectToJson(list));
+        } else {
+            list = JsonUtils.jsonToList(carouselStr, Carousel.class);
+        }
 
         return JSONResult.ok(list);
     }
@@ -49,7 +69,15 @@ public class IndexController {
     @ApiOperation(value = "获取商品分类(一级分类)", notes = "获取商品分类(一级分类)", httpMethod = "GET")
     @GetMapping("/cats")
     public JSONResult cats() {
-        List<Category> list = categoryService.queryAllRootLevelCat();
+
+        List<Category> list;
+        String catsStr = redisOperator.get("cats");
+        if (StringUtils.isBlank(catsStr)) {
+            list = categoryService.queryAllRootLevelCat();
+            redisOperator.set("cats", JsonUtils.objectToJson(list));
+        } else {
+            list = JsonUtils.jsonToList(catsStr, Category.class);
+        }
 
         return JSONResult.ok(list);
     }
@@ -64,9 +92,16 @@ public class IndexController {
             return JSONResult.errorMsg("分类不存在");
         }
 
-        List<CategoryVO> subCatList = categoryService.getSubCatList(rootCatId);
+        List<CategoryVO> list;
+        String subCatStr = redisOperator.get("subCat:" + rootCatId);
+        if (StringUtils.isBlank(subCatStr)) {
+            list = categoryService.getSubCatList(rootCatId);
+            redisOperator.set("subCat:" + rootCatId, JsonUtils.objectToJson(list));
+        } else {
+            list = JsonUtils.jsonToList(subCatStr, CategoryVO.class);
+        }
 
-        return JSONResult.ok(subCatList);
+        return JSONResult.ok(list);
     }
 
     @ApiOperation(value = "查询每个一级分类下的最新6条商品数据", notes = "查询每个一级分类下的最新6条商品数据", httpMethod = "GET")

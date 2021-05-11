@@ -1,8 +1,11 @@
 package com.zk.service;
 
 import com.zk.pojo.OrderStatus;
+import com.zk.pojo.bo.ShopcartBO;
 import com.zk.pojo.bo.SubmitOrderBO;
 import com.zk.pojo.vo.OrderVO;
+
+import java.util.List;
 
 /**
  * @author CoderZk
@@ -13,7 +16,7 @@ public interface OrderService {
      *
      * @param submitOrderBO
      */
-    OrderVO createOrder(SubmitOrderBO submitOrderBO);
+    OrderVO createOrder(List<ShopcartBO> shopcartList, SubmitOrderBO submitOrderBO);
 
     /**
      * 修改订单状态

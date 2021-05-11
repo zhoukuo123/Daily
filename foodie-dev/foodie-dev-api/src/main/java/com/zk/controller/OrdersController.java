@@ -3,14 +3,18 @@ package com.zk.controller;
 import com.zk.enums.OrderStatusEnum;
 import com.zk.enums.PayMethod;
 import com.zk.pojo.OrderStatus;
+import com.zk.pojo.bo.ShopcartBO;
 import com.zk.pojo.bo.SubmitOrderBO;
 import com.zk.pojo.vo.MerchantOrdersVO;
 import com.zk.pojo.vo.OrderVO;
 import com.zk.service.OrderService;
 import com.zk.utils.CookieUtils;
 import com.zk.utils.JSONResult;
+import com.zk.utils.JsonUtils;
+import com.zk.utils.RedisOperator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author CoderZk
@@ -33,6 +38,9 @@ public class OrdersController extends BaseController {
     @Resource
     private RestTemplate restTemplate;
 
+    @Resource
+    private RedisOperator redisOperator;
+
     @ApiOperation(value = "用户下单", notes = "用户下单", httpMethod = "POST")
     @PostMapping("/create")
     public JSONResult create(@RequestBody SubmitOrderBO submitOrderBO,
@@ -45,14 +53,23 @@ public class OrdersController extends BaseController {
 
 //        System.out.println(submitOrderBO);
 
+        String shopcartJson = redisOperator.get(FOODIE_SHOPCART + ":" + submitOrderBO.getUserId());
+        if (StringUtils.isBlank(shopcartJson)) {
+            return JSONResult.errorMsg("购物车数据不正确");
+        }
+
+        List<ShopcartBO> shopcartList = JsonUtils.jsonToList(shopcartJson, ShopcartBO.class);
+
         // 1. 创建订单
-        OrderVO orderVO = orderService.createOrder(submitOrderBO);
+        OrderVO orderVO = orderService.createOrder(shopcartList, submitOrderBO);
         String orderId = orderVO.getOrderId();
 
         // 2. 创建订单以后, 移除购物车中已结算(已提交)的商品
-
-        // TODO 整合redis之后, 完善购物车中的已结算商品清除, 并且同步到前端的cookie
-        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
+        // 清理覆盖现有的redis中的购物车数据
+        shopcartList.removeAll(orderVO.getToBeRemovedShopcartList());
+        // 整合redis之后, 完善购物车中的已结算商品清除, 并且同步到前端的cookie
+        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, JsonUtils.objectToJson(shopcartList), true);
+        redisOperator.set(FOODIE_SHOPCART + ":" + submitOrderBO.getUserId(), JsonUtils.objectToJson(shopcartList));
 
         // 3. 向支付中心发送当前订单, 用于保存支付中心的订单数据
         MerchantOrdersVO merchantOrdersVO = orderVO.getMerchantOrdersVO();

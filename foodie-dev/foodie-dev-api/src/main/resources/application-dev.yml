@@ -5,6 +5,11 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/foodie-shop-dev?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC
     password: zhoukuo
+  redis:
+    database: 1
+    host: 192.168.30.200
+    port: 6379
+    password: zhoukuo
 
 mybatis:
   configuration:
