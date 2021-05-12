@@ -2,6 +2,7 @@ package com.zk.controller.center;
 
 import com.zk.controller.BaseController;
 import com.zk.pojo.Users;
+import com.zk.pojo.UsersVO;
 import com.zk.pojo.bo.center.CenterUserBO;
 import com.zk.resource.FileUpload;
 import com.zk.service.center.CenterUserService;
@@ -130,13 +131,15 @@ public class CenterUserController extends BaseController {
         Users userResult = centerUserService.updateUserFace(userId, finalUserFaceUrl);
 
         // 信息脱敏
-        userResult = setNullProperty(userResult);
+//        userResult = setNullProperty(userResult);
+
+        // 增加令牌token, 会整合进redis, 分布式会话
+        UsersVO usersVO = convertUsersVO(userResult);
 
         // 把用户信息放入cookie中, 前端更新用户信息展示
         CookieUtils.setCookie(request, response, "user",
-                JsonUtils.objectToJson(userResult), true);
+                JsonUtils.objectToJson(usersVO), true);
 
-        // TODO 后续要改, 增加令牌token, 会整合进redis, 分布式会话
 
         return JSONResult.ok();
     }
@@ -158,14 +161,16 @@ public class CenterUserController extends BaseController {
 
         Users userResult = centerUserService.updateUserInfo(userId, centerUserBO);
 
-        // 信息脱敏
-        userResult = setNullProperty(userResult);
+//         信息脱敏
+//        userResult = setNullProperty(userResult);
+
+        // 增加令牌token, 会整合进redis, 分布式会话
+        UsersVO usersVO = convertUsersVO(userResult);
 
         // 把用户信息放入cookie中, 前端更新用户信息展示
         CookieUtils.setCookie(request, response, "user",
-                JsonUtils.objectToJson(userResult), true);
+                JsonUtils.objectToJson(usersVO), true);
 
-        // TODO 后续要改, 增加令牌token, 会整合进redis, 分布式会话
 
         return JSONResult.ok();
     }
