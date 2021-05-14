@@ -4,7 +4,7 @@
 #
 ##########################################################################
 server:
-#  port: 8088
+  #  port: 8088
   tomcat:
     uri-enoding: UTF-8
   max-http-header-size: 80KB
@@ -20,7 +20,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/foodie-shop-dev?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC
+    #    url: jdbc:mysql://localhost:3306/foodie-shop-dev?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC
     username: root
     #    password: zhoukuo
     hikari:
@@ -37,8 +37,13 @@ spring:
       max-file-size: 512000     # 文件上传大小限制为500kb
       max-request-size: 512000  # 请求大小限制为500kb
       # Spring Session 配置
-#  session:
-#    store-type: redis
+  #  session:
+  #    store-type: redis
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
 
 ##########################################################################
 #

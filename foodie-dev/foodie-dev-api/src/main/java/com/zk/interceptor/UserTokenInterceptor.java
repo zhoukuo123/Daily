@@ -1,5 +1,7 @@
 package com.zk.interceptor;
 
+import com.zk.utils.JSONResult;
+import com.zk.utils.JsonUtils;
 import com.zk.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -8,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author CoderZk
@@ -37,24 +42,41 @@ public class UserTokenInterceptor implements HandlerInterceptor {
         if (StringUtils.isNotBlank(userToken) && StringUtils.isNotBlank(userId)) {
             String uniqueToken = redisOperator.get(REDIS_USER_TOKEN + ":" + userId);
             if (StringUtils.isBlank(uniqueToken)) {
-                System.out.println("请登录...");
+                returnErrorResponse(response, JSONResult.errorMsg("请登录..."));
                 return false;
             } else {
                 if (!uniqueToken.equals(userToken)) {
-                    System.out.println("账号在异地登录...");
+                    returnErrorResponse(response, JSONResult.errorMsg("账号在异地登录..."));
                     return false;
                 }
             }
         } else {
-            System.out.println("请登录...");
+            returnErrorResponse(response, JSONResult.errorMsg("请登录..."));
             return false;
         }
 
-        /**
-         * false: 请求被拦截, 被驳回, 验证出现问题
-         * true: 请求在经过验证校验以后, 是OK的, 是可以放行的
-         */
         return true;
+    }
+
+    public void returnErrorResponse(HttpServletResponse response, JSONResult result) {
+        OutputStream out = null;
+        try {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("text/json");
+            out = response.getOutputStream();
+            out.write(JsonUtils.objectToJson(result).getBytes(StandardCharsets.UTF_8));
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
