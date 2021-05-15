@@ -10,13 +10,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @Description: 自定义响应数据结构
  * 				本类可提供给 H5/ios/安卓/公众号/小程序 使用
  * 				前端接受此类数据（json object)后，可自行根据业务去实现相关功能
- * 
+ *
  * 				200：表示成功
  * 				500：表示错误，错误信息在msg字段中
  * 				501：bean验证错误，不管多少个错误都以map形式返回
  * 				502：拦截器拦截到用户token出错
  * 				555：异常抛出信息
  * 				556: 用户qq校验异常
+ * 			    557: 校验用户是否在CAS登录, 用户门票的校验
  */
 public class JSONResult {
 
@@ -50,19 +51,23 @@ public class JSONResult {
     public static JSONResult ok() {
         return new JSONResult(null);
     }
-    
+
     public static JSONResult errorMsg(String msg) {
         return new JSONResult(500, msg, null);
     }
-    
+
+    public static JSONResult errorUserTicket(String msg) {
+        return new JSONResult(557, msg, null);
+    }
+
     public static JSONResult errorMap(Object data) {
         return new JSONResult(501, "error", data);
     }
-    
+
     public static JSONResult errorTokenMsg(String msg) {
         return new JSONResult(502, msg, null);
     }
-    
+
     public static JSONResult errorException(String msg) {
         return new JSONResult(555, msg, null);
     }
