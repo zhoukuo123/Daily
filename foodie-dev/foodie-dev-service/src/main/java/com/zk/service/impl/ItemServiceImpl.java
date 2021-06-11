@@ -209,6 +209,17 @@ public class ItemServiceImpl extends BaseService implements ItemService {
 
         // lockUtil.unLock(); -- 解锁
 
+        // 并发事务下产生的问题: 脏读, 不可重复读, 幻读
+        // 脏读: 因为这个事务不存在回滚rollback的情况, 所以不存在脏读的问题
+        // 不可重复读: 因为在这个事务中没有读取操作, 也没有读取2次某个数据, 所以不存在不可重复读的问题
+        // 幻读: 因为在这个事务中没有插入, 删除操作, 所以不存在幻读的问题
+
+        //  所以, 事务隔离级别没必要设置, 就为DEFAULT即可, 在mysql上InnoDB默认为可重复读 (repeatable-read)
+        //
+
+        // DML 语句默认就是一个事务, 是原子操作, 当程序A 对表执行where判断,判断成功了,但还没有对表进行修改.
+        // 这时候程序B是无法对表进行where判断的. 因为程序A对表的X锁仍未释放,程序B无法申请获取X锁.
+        // 更新操作会给要更新的数据加排它锁(行锁), 所以其他的update语句只要是更新同样的这一条记录的操作不会执行,
         int result = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
         if (result != 1) {
             throw new RuntimeException("订单创建失败, 原因: 库存不足!");
