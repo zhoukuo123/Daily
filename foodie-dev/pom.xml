@@ -16,6 +16,8 @@
         <module>foodie-sso</module>
         <module>ratellimiter-annotation</module>
         <module>ratelimiter-test</module>
+        <module>foodie-dev-fs</module>
+        <module>foodie-dev-search</module>
     </modules>
 
     <properties>
