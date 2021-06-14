@@ -60,7 +60,9 @@ public class CenterUserController {
                     return JSONResult.errorMsg("图片格式不正确!");
                 }
 
-                path = fdfsService.upload(file, suffix);
+//                path = fdfsService.upload(file, suffix);
+
+                path = fdfsService.uploadOSS(file, userId, suffix);
                 System.out.println(path);
 
             }
@@ -69,7 +71,8 @@ public class CenterUserController {
         }
 
         if (StringUtils.isNotBlank(path)) {
-            String finalUserFaceUrl = fileResource.getHost() + path;
+//            String finalUserFaceUrl = fileResource.getHost() + path;
+            String finalUserFaceUrl = fileResource.getOssHost() + path;
 
             // 更新用户头像到数据库
             Users userResult = centerUserService.updateUserFace(userId, finalUserFaceUrl);
