@@ -18,6 +18,7 @@
         <module>ratelimiter-test</module>
         <module>foodie-dev-fs</module>
         <module>foodie-dev-search</module>
+        <module>distribute-lock</module>
     </modules>
 
     <properties>
