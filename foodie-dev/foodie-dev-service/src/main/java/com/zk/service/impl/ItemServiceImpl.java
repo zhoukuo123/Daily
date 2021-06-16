@@ -13,6 +13,10 @@ import com.zk.service.ItemService;
 import com.zk.service.impl.center.BaseService;
 import com.zk.utils.DesensitizationUtil;
 import com.zk.utils.PagedGridResult;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +24,13 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author CoderZk
  */
 @Service
+@Slf4j
 public class ItemServiceImpl extends BaseService implements ItemService {
 
     @Resource
@@ -44,6 +50,9 @@ public class ItemServiceImpl extends BaseService implements ItemService {
 
     @Resource
     private ItemsMapperCustom itemsMapperCustom;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -188,7 +197,7 @@ public class ItemServiceImpl extends BaseService implements ItemService {
         return result != null ? result.getUrl() : "";
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public void decreaseItemSpecStock(String specId, Integer buyCounts) {
 
@@ -219,10 +228,34 @@ public class ItemServiceImpl extends BaseService implements ItemService {
 
         // DML 语句默认就是一个事务, 是原子操作, 当程序A 对表执行where判断,判断成功了,但还没有对表进行修改.
         // 这时候程序B是无法对表进行where判断的. 因为程序A对表的X锁仍未释放,程序B无法申请获取X锁.
-        // 更新操作会给要更新的数据加排它锁(行锁), 所以其他的update语句只要是更新同样的这一条记录的操作不会执行,
+        // 更新操作会给要更新的数据加排它锁(行锁), 所以其他的 update 语句只要是更新同样的这一条记录的操作不会执行,
         int result = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
         if (result != 1) {
             throw new RuntimeException("订单创建失败, 原因: 库存不足!");
         }
+
+        /**
+         * 分布式锁 编写业务代码
+         * 1. Redisson 是基于 Redis, 使用 Redisson 之前, 项目必须使用 Redis
+         * 2. 注意 getLock 方法中的参数, 以 specId 作为参数, 每个 specId 一个 key, 和数据库中的行锁是一致的, 不会是方法级别的锁
+         */
+        RLock rlock = redissonClient.getLock("SPECID_" + specId);
+        try {
+            rlock.lock(5, TimeUnit.SECONDS);
+            int result2 = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
+            if (result2 != 1) {
+                throw new RuntimeException("订单创建失败, 原因: 库存不足!");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        } finally {
+            /**
+             * 不管业务是否操作正确, 随后都要释放掉分布式锁
+             * 如果不释放, 过了超时时间也会自动释放
+             */
+            rlock.unlock();
+        }
+
+
     }
 }
