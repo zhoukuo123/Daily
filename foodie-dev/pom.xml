@@ -19,6 +19,7 @@
         <module>foodie-dev-fs</module>
         <module>foodie-dev-search</module>
         <module>distribute-lock</module>
+        <module>distribute-zk-lock</module>
     </modules>
 
     <properties>

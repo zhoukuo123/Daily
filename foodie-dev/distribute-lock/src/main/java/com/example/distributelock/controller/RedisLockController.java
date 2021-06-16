@@ -25,6 +25,8 @@ public class RedisLockController {
             if (redisLock.getLock()) {
                 log.info("我进入了锁！！");
                 Thread.sleep(15000);
+            } else {
+                log.info("当前锁已被占用, 拿不到分布式锁");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,17 +38,18 @@ public class RedisLockController {
 
     @RequestMapping("zkLock")
     public String zkLock() {
+
         log.info("我进入了方法！");
+
         try (ZkLock zkLock = new ZkLock("localhost:2181", "order")) {
             if (zkLock.getLock()) {
                 log.info("我进入了锁！！");
                 Thread.sleep(15000);
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         log.info("方法执行完成");
         return "方法执行完成";
     }
