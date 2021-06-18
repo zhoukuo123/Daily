@@ -20,6 +20,10 @@ public class Sid {
     public static synchronized void configure(WorkerIdStrategy custom) {
         if (workerIdStrategy != null) workerIdStrategy.release();
         workerIdStrategy = custom;
+
+        // 初始化, 根据服务器的IP地址, 生成workId
+        workerIdStrategy.initialize();
+
         idWorker = new IdWorker(workerIdStrategy.availableWorkerId()) {
             @Override
             public long getEpoch() {

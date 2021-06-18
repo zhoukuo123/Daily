@@ -1,9 +1,9 @@
 package org.n3r.idworker;
 
-import java.security.SecureRandom;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.security.SecureRandom;
 
 public class IdWorker {
     protected long epoch = 1288834974657L;
@@ -46,6 +46,9 @@ public class IdWorker {
     }
 
     public synchronized long nextId() {
+        // 因为加了synchronized锁, 所以当前的毫秒数timestamp是唯一的?
+        // 不一定, 有可能在这一毫秒进入了2个请求, 就是1个请求执行完, 之后又一个请求在这一毫秒内进入了
+        // 而且是单机锁, 在分布式环境下无用
         long timestamp = millisGen();
 
         if (timestamp < lastMillis) {
