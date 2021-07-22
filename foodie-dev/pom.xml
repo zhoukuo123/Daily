@@ -14,6 +14,8 @@
         <module>foodie-dev-service</module>
         <module>foodie-dev-api</module>
         <module>foodie-sso</module>
+        <module>ratellimiter-annotation</module>
+        <module>ratelimiter-test</module>
     </modules>
 
     <properties>
@@ -164,6 +166,17 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.netease</groupId>
+            <artifactId>gslb</artifactId>
+            <version>1.1.0</version>
+            <type>aar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
         </dependency>
     </dependencies>
 </project>
