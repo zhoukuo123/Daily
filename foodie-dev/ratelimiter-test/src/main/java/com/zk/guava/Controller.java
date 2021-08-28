@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author CoderZk
  */
@@ -18,6 +20,18 @@ public class Controller {
     @GetMapping("/tryAcquire")
     public String tryAcquire(Integer count) {
         if (limiter.tryAcquire(count)) {
+            log.info("success, rate is {}", limiter.getRate());
+            return "success";
+        } else {
+            log.info("fail, rate is {}", limiter.getRate());
+            return "fail";
+        }
+    }
+
+    // 限定时间的非阻塞限流
+    @GetMapping("/tryAcquireWithTimeout")
+    public String tryAcquireWithTimeout(Integer count, Integer timeout) {
+        if (limiter.tryAcquire(count, timeout, TimeUnit.SECONDS)) {
             log.info("success, rate is {}", limiter.getRate());
             return "success";
         } else {

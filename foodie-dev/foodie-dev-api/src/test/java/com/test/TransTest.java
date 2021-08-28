@@ -2,6 +2,7 @@ package com.test;
 
 import com.zk.Application;
 import com.zk.service.TestTransService;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
@@ -16,7 +17,7 @@ public class TransTest {
     @Resource
     private TestTransService testTransService;
 
-//    @Test
+    @Test
     public void myTest() {
         testTransService.testPropagationTrans();
     }
