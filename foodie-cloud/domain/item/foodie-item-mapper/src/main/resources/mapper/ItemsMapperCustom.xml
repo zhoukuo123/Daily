@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zk.item.mapper.ItemsMapperCustom">
+
+    <select id="queryItemComments" parameterType="Map" resultType="com.zk.item.pojo.vo.ItemCommentVO">
+        select ic.comment_level as commentLevel,
+        ic.content as content,
+        ic.sepc_name as sepcName,
+        ic.created_time as createdTime,
+        u.face as userFace,
+        u.nickname as nickname
+        from items_comments ic
+        join
+        users u
+        on ic.user_id = u.id
+        where ic.item_id = #{paramsMap.itemId}
+        <if test=" paramsMap.level != null and paramsMap.level != '' ">
+            and ic.comment_level = #{paramsMap.level}
+        </if>
+    </select>
+
+<!--    <select id="searchItems" parameterType="Map" resultType="com.zk.item.pojo.vo.SearchItemsVO">-->
+<!--        select i.id as itemId,-->
+<!--        i.item_name as itemName,-->
+<!--        i.sell_counts as sellCounts,-->
+<!--        ii.url as imgUrl,-->
+<!--        MIN(s.price_discount) as price-->
+<!--        from items i-->
+<!--        left join items_img ii on i.id = ii.item_id-->
+<!--        left join items_spec s on i.id = s.item_id-->
+<!--        where ii.is_main = 1-->
+<!--        <if test=" paramsMap.keywords != null and paramsMap.keywords != '' ">-->
+<!--            and i.item_name like '%${paramsMap.keywords}%'-->
+<!--        </if>-->
+<!--        group by i.id, i.item_name, i.sell_counts, ii.url-->
+<!--        order by-->
+<!--        <choose>-->
+<!--            <when test=" paramsMap.sort == 'c'.toString() ">-->
+<!--                i.sell_counts desc-->
+<!--            </when>-->
+<!--            <when test=" paramsMap.sort == 'p'.toString() ">-->
+<!--                price asc-->
+<!--            </when>-->
+<!--            <otherwise>-->
+<!--                i.item_name asc-->
+<!--            </otherwise>-->
+<!--        </choose>-->
+<!--    </select>-->
+<!--    &lt;!&ndash;              k: 默认, 代表默认排序, 根据name&ndash;&gt;-->
+<!--    &lt;!&ndash;              c: 根据销量排序&ndash;&gt;-->
+<!--    &lt;!&ndash;              p: 根据价格排序&ndash;&gt;-->
+
+<!--    <select id="searchItemsByThirdCat" parameterType="Map" resultType="com.zk.item.pojo.vo.SearchItemsVO">-->
+<!--        select i.id as itemId,-->
+<!--        i.item_name as itemName,-->
+<!--        i.sell_counts as sellCounts,-->
+<!--        ii.url as imgUrl,-->
+<!--        MIN(s.price_discount) as price-->
+<!--        from items i-->
+<!--        left join items_img ii on i.id = ii.item_id-->
+<!--        left join items_spec s on i.id = s.item_id-->
+<!--        where ii.is_main = 1-->
+<!--        and i.cat_id = #{paramsMap.catId}-->
+<!--        group by i.id, i.item_name, i.sell_counts, ii.url-->
+<!--        order by-->
+<!--        <choose>-->
+<!--            <when test=" paramsMap.sort == &quot;c&quot; ">-->
+<!--                i.sell_counts desc-->
+<!--            </when>-->
+<!--            <when test=" paramsMap.sort == &quot;p&quot; ">-->
+<!--                price asc-->
+<!--            </when>-->
+<!--            <otherwise>-->
+<!--                i.item_name asc-->
+<!--            </otherwise>-->
+<!--        </choose>-->
+<!--    </select>-->
+
+    <select id="queryItemsBySpecIds" parameterType="List" resultType="com.zk.item.pojo.vo.ShopcartVO">
+        select i.id as itemId,
+        ii.url as itemImgUrl,
+        i.item_name as itemName,
+        s.id as specId,
+        s.name as specName,
+        s.price_discount as priceDiscount,
+        s.price_normal as priceNormal
+        from items i
+        left join items_img ii on i.id = ii.item_id
+        left join items_spec s on i.id = s.item_id
+        where ii.is_main = 1
+        and s.id in
+        <foreach collection="paramsList" index="index" item="specId" open="(" separator="," close=")">
+            #{specId}
+        </foreach>
+    </select>
+    <!--                 ('3', '2', '1')-->
+
+    <update id="decreaseItemSpecStock">
+        update
+            items_spec
+        set stock = stock - #{pendingCounts}
+        where id = #{specId}
+          and stock >= #{pendingCounts}
+    </update>
+
+
+</mapper>
