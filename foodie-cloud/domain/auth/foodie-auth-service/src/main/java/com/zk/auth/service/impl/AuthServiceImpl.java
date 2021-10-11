@@ -7,12 +7,14 @@ import com.zk.auth.service.pojo.AuthResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 /**
  * @author CoderZk
  */
+@Service
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
