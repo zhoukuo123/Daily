@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class Controller {
 
     private RateLimiter limiter = RateLimiter.create(2.0);
+    private RateLimiter limiter2 = RateLimiter.create(10.0);
 
     // 非阻塞限流
     @GetMapping("/tryAcquire")
@@ -31,12 +32,20 @@ public class Controller {
     // 限定时间的非阻塞限流
     @GetMapping("/tryAcquireWithTimeout")
     public String tryAcquireWithTimeout(Integer count, Integer timeout) {
-        if (limiter.tryAcquire(count, timeout, TimeUnit.SECONDS)) {
+        if (limiter2.tryAcquire(count, timeout, TimeUnit.SECONDS)) {
             log.info("success, rate is {}", limiter.getRate());
             return "success";
         } else {
             log.info("fail, rate is {}", limiter.getRate());
             return "fail";
         }
+    }
+
+    // 同步阻塞限流
+    @GetMapping("/acquire")
+    public String acquire() {
+        limiter.acquire();
+        log.info("success, rate is {}", limiter.getRate());
+        return "success";
     }
 }
