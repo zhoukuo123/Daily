@@ -1,3 +1,9 @@
 /spring-cloud-demo/.idea
 /spring-cloud-demo/eureka/*/target
+/spring-cloud-demo/eureka/*/*.iml
 /spring-cloud-demo/feign/*/target
+/spring-cloud-demo/feign/*/*.iml
+/spring-cloud-demo/hystrix/*/target
+/spring-cloud-demo/hystrix/*/*.iml
+/spring-cloud-demo/ribbon/*/target
+/spring-cloud-demo/ribbon/*/*.iml
