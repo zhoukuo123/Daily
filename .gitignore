@@ -1,0 +1,3 @@
+/spring-cloud-demo/.idea
+/spring-cloud-demo/eureka/*/target
+/spring-cloud-demo/feign/*/target
