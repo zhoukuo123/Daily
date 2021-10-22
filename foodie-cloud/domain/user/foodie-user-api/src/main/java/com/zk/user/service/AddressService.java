@@ -2,6 +2,7 @@ package com.zk.user.service;
 
 import com.zk.user.pojo.UserAddress;
 import com.zk.user.pojo.bo.AddressBO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * @author CoderZk
  */
+@FeignClient("foodie-user-service")
 @RequestMapping("address-api")
 public interface AddressService {
     /**

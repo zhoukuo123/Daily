@@ -4,11 +4,13 @@ import com.zk.order.pojo.Orders;
 import com.zk.order.pojo.vo.OrderStatusCountsVO;
 import com.zk.pojo.JSONResult;
 import com.zk.pojo.PagedGridResult;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author CoderZk
  */
+@FeignClient("foodie-order-service")
 @RequestMapping("myorder-api")
 public interface MyOrdersService {
     /**

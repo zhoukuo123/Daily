@@ -1,6 +1,7 @@
 package com.zk.item.service;
 
 import com.zk.pojo.PagedGridResult;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 /**
  * @author CoderZk
  */
+@FeignClient("foodie-item-service")
 @RequestMapping("/item-comments-api")
 public interface ItemCommentsService {
 

@@ -2,11 +2,13 @@ package com.zk.user.service.center;
 
 import com.zk.user.pojo.Users;
 import com.zk.user.pojo.bo.center.CenterUserBO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author CoderZk
  */
+@FeignClient("foodie-user-service")
 @RequestMapping("center-user-api")
 public interface CenterUserService {
     /**

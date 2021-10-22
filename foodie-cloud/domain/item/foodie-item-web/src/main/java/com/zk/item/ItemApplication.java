@@ -16,7 +16,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 // 扫描所有包以及相关组件包
 @ComponentScan(basePackages = {"com.zk", "org.n3r.idworker"})
 @EnableDiscoveryClient
-// TODO add feign 注解
 public class ItemApplication {
     public static void main(String[] args) {
         SpringApplication.run(ItemApplication.class, args);

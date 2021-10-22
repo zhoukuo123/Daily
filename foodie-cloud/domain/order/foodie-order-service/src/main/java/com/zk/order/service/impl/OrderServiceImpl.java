@@ -4,6 +4,7 @@ import com.zk.enums.OrderStatusEnum;
 import com.zk.enums.YesOrNo;
 import com.zk.item.pojo.Items;
 import com.zk.item.pojo.ItemsSpec;
+import com.zk.item.service.ItemService;
 import com.zk.order.mapper.OrderItemsMapper;
 import com.zk.order.mapper.OrderStatusMapper;
 import com.zk.order.mapper.OrdersMapper;
@@ -17,6 +18,7 @@ import com.zk.order.pojo.vo.OrderVO;
 import com.zk.order.service.OrderService;
 import com.zk.pojo.ShopcartBO;
 import com.zk.user.pojo.UserAddress;
+import com.zk.user.service.AddressService;
 import com.zk.utils.DateUtil;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,18 +49,11 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private OrderStatusMapper orderStatusMapper;
 
-    // TODO 学了Feign在来把注释打开
-//    @Autowired
-//    private AddressService addressService;
-//
-//    @Autowired
-//    private ItemService itemService;
+    @Autowired
+    private AddressService addressService;
 
     @Autowired
-    private LoadBalancerClient client;
-
-    @Autowired
-    private RestTemplate restTemplate;
+    private ItemService itemService;
 
     @Resource
     private Sid sid;
@@ -79,15 +74,7 @@ public class OrderServiceImpl implements OrderService {
 
         String orderId = sid.nextShort();
 
-        // FIXME 等待feign章节再来简化
-//        UserAddress address = addressService.queryUserAddress(userId, addressId);
-        ServiceInstance instance = client.choose("FOODIE-USER-SERVICE");
-        String url = String.format("http://%s:%s/address-api/queryAddress" +
-                        "?userId=%s&address=%s",
-                instance.getHost(),
-                instance.getPort(),
-                userId, addressId);
-        UserAddress address = restTemplate.getForObject(url, UserAddress.class);
+        UserAddress address = addressService.queryUserAddress(userId, addressId);
 
         // 1. 新订单数据保存
         Orders newOrder = new Orders();
@@ -124,38 +111,14 @@ public class OrderServiceImpl implements OrderService {
             toBeRemovedShopcartList.add(cartItem);
 
             // 2.1 根据规格id, 查询规格的具体信息, 主要获取价格
-            // FIXME 等待feign章节再来简化
-//            ItemsSpec itemsSpec = itemService.queryItemSpecById(itemSpecId);
-            ServiceInstance instance2 = client.choose("FOODIE-ITEM-SERVICE");
-            String url2 = String.format("http://%s:%s/item-api/singleItemSpec" +
-                            "?specId=%s",
-                    instance2.getHost(),
-                    instance2.getPort(),
-                    itemSpecId);
-            ItemsSpec itemsSpec = restTemplate.getForObject(url2, ItemsSpec.class);
+            ItemsSpec itemsSpec = itemService.queryItemSpecById(itemSpecId);
             totalAmount += itemsSpec.getPriceNormal() * buyCounts;
             realPayAmount += itemsSpec.getPriceDiscount() * buyCounts;
 
             // 2.2 根据商品id, 获得商品信息以及商品图片
             String itemId = itemsSpec.getItemId();
-            // FIXME 等待feign章节再来简化
-//            Items item = itemService.queryItemById(itemId);
-            ServiceInstance instance3 = client.choose("FOODIE-ITEM-SERVICE");
-            String url3 = String.format("http://%s:%s/item-api/item" +
-                            "?itemId=%s",
-                    instance3.getHost(),
-                    instance3.getPort(),
-                    itemId);
-            Items item = restTemplate.getForObject(url3, Items.class);
-            // FIXME 等待feign章节再来简化
-//            String imgUrl = itemService.queryItemMainImgById(itemId);
-            ServiceInstance instance4 = client.choose("FOODIE-ITEM-SERVICE");
-            String url4 = String.format("http://%s:%s/item-api/primaryImage" +
-                            "?itemId=%s",
-                    instance4.getHost(),
-                    instance4.getPort(),
-                    itemId);
-            String imgUrl = restTemplate.getForObject(url4, String.class);
+            Items item = itemService.queryItemById(itemId);
+            String imgUrl = itemService.queryItemMainImgById(itemId);
 
             // 2.3 循环保存子订单数据到数据库
             String subOrderId = sid.nextShort();
@@ -172,15 +135,7 @@ public class OrderServiceImpl implements OrderService {
             orderItemsMapper.insert(subOrderItem);
 
             // 2.4 在用户提交订单以后, 规格表中需要扣除库存
-            // FIXME 等待feign章节再来简化
-//            itemService.decreaseItemSpecStock(itemSpecId, buyCounts);
-            ServiceInstance instance5 = client.choose("FOODIE-ITEM-SERVICE");
-            String url5 = String.format("http://%s:%s/item-api/decreaseStock" +
-                            "?itemId=%s&buyCounts=%d",
-                    instance5.getHost(),
-                    instance5.getPort(),
-                    itemSpecId, buyCounts);
-            restTemplate.postForLocation(url5, null);
+            itemService.decreaseItemSpecStock(itemSpecId, buyCounts);
         }
 
         newOrder.setTotalAmount(totalAmount);

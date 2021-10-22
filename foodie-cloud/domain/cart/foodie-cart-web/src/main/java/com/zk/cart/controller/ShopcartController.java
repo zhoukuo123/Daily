@@ -69,7 +69,12 @@ public class ShopcartController extends BaseController {
         return JSONResult.ok();
     }
 
-    // TODO 1)购物车清空功能
-    //      2) 加减号 - 添加, 减少商品数量
-    //         +1 -1 -1 = 0  => -1 -1 +1 = 1 (问题: 如何保证前端请求顺序执行)
+    @PostMapping("clearCart")
+    public JSONResult clear(@RequestParam String userId) {
+        cartService.clearCart(userId);
+        return JSONResult.ok();
+    }
+
+    //  1) 加减号 - 添加, 减少商品数量
+    //         +1 -1 -1 = 0  => -1 -1 +1 = 1 (问题: 如何保证前端请求顺序执行, 在前端处理比较方便)
 }

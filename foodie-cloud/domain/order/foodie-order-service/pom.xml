@@ -47,10 +47,10 @@
 
         <!-- 学到Feign章节后, 就可以把它删掉, 因为Feign组件可以通过服务接口直接发起远程调用,
          但是如果没有Feign, 我们只能通过Eureka和loadBalancer这种形式来发起调用-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

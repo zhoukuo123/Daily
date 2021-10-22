@@ -5,6 +5,7 @@ import com.zk.order.pojo.bo.PlaceOrderBO;
 import com.zk.order.pojo.bo.SubmitOrderBO;
 import com.zk.order.pojo.vo.OrderVO;
 import com.zk.pojo.ShopcartBO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * @author CoderZk
  */
+@FeignClient("foodie-order-service")
 @RequestMapping("order-api")
 public interface OrderService {
     /**

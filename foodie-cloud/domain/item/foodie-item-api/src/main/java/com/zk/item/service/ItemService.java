@@ -7,6 +7,7 @@ import com.zk.item.pojo.ItemsSpec;
 import com.zk.item.pojo.vo.CommentLevelCountsVO;
 import com.zk.item.pojo.vo.ShopcartVO;
 import com.zk.pojo.PagedGridResult;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * @author CoderZk
  */
+@FeignClient("foodie-item-service")
 @RequestMapping("/item-api")
 public interface ItemService {
     /**

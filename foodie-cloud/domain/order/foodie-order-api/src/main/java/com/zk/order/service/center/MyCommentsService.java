@@ -3,6 +3,7 @@ package com.zk.order.service.center;
 import com.zk.order.pojo.OrderItems;
 import com.zk.order.pojo.bo.center.OrderItemsCommentBO;
 import com.zk.pojo.PagedGridResult;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * @author CoderZk
  */
+@FeignClient("foodie-order-service")
 @RequestMapping("order-comments-api")
 public interface MyCommentsService {
     /**

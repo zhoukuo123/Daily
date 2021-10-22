@@ -2,6 +2,7 @@ package com.zk.order.controller.center;
 
 import com.zk.controller.BaseController;
 import com.zk.enums.YesOrNo;
+import com.zk.item.service.ItemCommentsService;
 import com.zk.order.pojo.OrderItems;
 import com.zk.order.pojo.Orders;
 import com.zk.order.pojo.bo.center.OrderItemsCommentBO;
@@ -38,10 +39,7 @@ public class MyCommentsController extends BaseController {
     private MyOrdersService myOrdersService;
 
     @Autowired
-    private LoadBalancerClient client;
-
-    @Autowired
-    private RestTemplate restTemplate;
+    private ItemCommentsService itemCommentsService;
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息", httpMethod = "POST")
     @PostMapping("/pending")
@@ -117,15 +115,7 @@ public class MyCommentsController extends BaseController {
             pageSize = COMMON_PAGE_SIZE;
         }
 
-        // TODO 学完Feign再来改造
-        ServiceInstance instance = client.choose("FOODIE-ITEM-SERVICE");
-        String url = String.format("http://%s:%s/item-comments-api/myComments" +
-                        "?userId=%s&page=%d&pageSize=%d",
-                instance.getHost(),
-                instance.getPort(),
-                userId, page, pageSize);
-        PagedGridResult grid = restTemplate.getForObject(url, PagedGridResult.class);
-//        PagedGridResult grid = myCommentsService.queryMyComments(userId, page, pageSize);
+        PagedGridResult grid = itemCommentsService.queryMyComments(userId, page, pageSize);
 
         return JSONResult.ok(grid);
     }

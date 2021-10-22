@@ -1,6 +1,7 @@
 package com.zk.order.service.impl.center;
 
 import com.zk.enums.YesOrNo;
+import com.zk.item.service.ItemCommentsService;
 import com.zk.order.mapper.OrderItemsMapper;
 import com.zk.order.mapper.OrderStatusMapper;
 import com.zk.order.mapper.OrdersMapper;
@@ -39,10 +40,7 @@ public class MyCommentsServiceImpl extends BaseService implements MyCommentsServ
 
     // TODO feign章节里改成item-api
     @Autowired
-    private LoadBalancerClient client;
-
-    @Autowired
-    private RestTemplate restTemplate;
+    private ItemCommentsService itemCommentsService;
 
     @Resource
     private OrdersMapper ordersMapper;
@@ -73,11 +71,7 @@ public class MyCommentsServiceImpl extends BaseService implements MyCommentsServ
         map.put("userId", userId);
         map.put("commentList", commentList);
 //        itemsCommentsMapperCustom.saveComments(map);
-        ServiceInstance instance = client.choose("FOODIE-ITEM-SERVICE");
-        String url = String.format("http://%s:%s/item-comments-api/saveComments",
-                instance.getHost(),
-                instance.getPort());
-        restTemplate.postForLocation(url, map);
+        itemCommentsService.saveComments(map);
 
         // 2. 修改订单表改为已评价 orders
         Orders order = new Orders();

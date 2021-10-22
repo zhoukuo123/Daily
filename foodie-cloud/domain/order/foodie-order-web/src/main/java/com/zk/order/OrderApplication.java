@@ -3,6 +3,7 @@ package com.zk.order;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import tk.mybatis.spring.annotation.MapperScan;
@@ -16,7 +17,10 @@ import tk.mybatis.spring.annotation.MapperScan;
 // 扫描所有包以及相关组件包
 @ComponentScan(basePackages = {"com.zk", "org.n3r.idworker"})
 @EnableDiscoveryClient
-// TODO add feign 注解
+@EnableFeignClients(basePackages = {
+        "com.zk.item.service",
+        "com.zk.user.service"
+})
 @EnableScheduling
 public class OrderApplication {
     public static void main(String[] args) {
