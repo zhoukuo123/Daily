@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * @author CoderZk
  */
-@FeignClient("feign-client")
+@FeignClient(value = "feign-client", primary = false)
 public interface IService {
 
     @GetMapping("/sayHi")
@@ -18,8 +18,8 @@ public interface IService {
     @PostMapping("/sayHi")
     Friend sayHiPost(@RequestBody Friend friend);
 
-//    @GetMapping("/retry")
-//    String retry(@RequestParam(name = "timeout") int timeout);
+    @GetMapping("/retry")
+    String retry(@RequestParam(name = "timeout") int timeout);
 
     @GetMapping("/error")
     String error();

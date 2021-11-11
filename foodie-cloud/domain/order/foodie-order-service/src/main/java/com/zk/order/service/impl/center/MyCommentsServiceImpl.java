@@ -38,7 +38,6 @@ public class MyCommentsServiceImpl extends BaseService implements MyCommentsServ
 //    @Resource
 //    private ItemsCommentsMapperCustom itemsCommentsMapperCustom;
 
-    // TODO feign章节里改成item-api
     @Autowired
     private ItemCommentsService itemCommentsService;
 

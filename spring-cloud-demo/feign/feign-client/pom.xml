@@ -33,7 +33,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-<!--        引入 公共接口层 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.12</version>
+        </dependency>
+
+        <!--        引入 公共接口层 -->
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>feign-client-intf</artifactId>
