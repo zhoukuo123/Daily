@@ -16,6 +16,7 @@
         <module>eureka/eureka-server-peer2</module>
         <module>ribbon/ribbon-consumer</module>
         <module>hystrix/hystrix-turbine</module>
+        <module>hystrix/hystrix-dashboard</module>
     </modules>
 
     <properties>
