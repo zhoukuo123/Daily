@@ -23,7 +23,7 @@
         <module>domain/user/foodie-user-service</module>
         <module>domain/user/foodie-user-web</module>
         <module>domain/order/foodie-order-pojo</module>
-        <module>foodie-order-mapper</module>
+        <module>domain/order/foodie-order-mapper</module>
         <module>domain/order/foodie-order-mapper</module>
         <module>domain/order/foodie-order-api</module>
         <module>domain/order/foodie-order-service</module>
@@ -31,6 +31,8 @@
         <module>domain/cart/foodie-cart-api</module>
         <module>domain/cart/foodie-cart-service</module>
         <module>domain/cart/foodie-cart-web</module>
+        <module>platform/hystrix-turbine</module>
+        <module>platform/hystrix-dashboard</module>
     </modules>
 
     <packaging>pom</packaging>
