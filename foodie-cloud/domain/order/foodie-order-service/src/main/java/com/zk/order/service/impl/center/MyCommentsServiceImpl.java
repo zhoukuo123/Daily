@@ -2,6 +2,7 @@ package com.zk.order.service.impl.center;
 
 import com.zk.enums.YesOrNo;
 import com.zk.item.service.ItemCommentsService;
+import com.zk.order.fallback.itemservice.ItemCommentsFeignClient;
 import com.zk.order.mapper.OrderItemsMapper;
 import com.zk.order.mapper.OrderStatusMapper;
 import com.zk.order.mapper.OrdersMapper;
@@ -39,7 +40,8 @@ public class MyCommentsServiceImpl extends BaseService implements MyCommentsServ
 //    private ItemsCommentsMapperCustom itemsCommentsMapperCustom;
 
     @Autowired
-    private ItemCommentsService itemCommentsService;
+//    private ItemCommentsService itemCommentsService;
+    private ItemCommentsFeignClient itemCommentsService;
 
     @Resource
     private OrdersMapper ordersMapper;

@@ -3,6 +3,7 @@ package com.zk.order.controller.center;
 import com.zk.controller.BaseController;
 import com.zk.enums.YesOrNo;
 import com.zk.item.service.ItemCommentsService;
+import com.zk.order.fallback.itemservice.ItemCommentsFeignClient;
 import com.zk.order.pojo.OrderItems;
 import com.zk.order.pojo.Orders;
 import com.zk.order.pojo.bo.center.OrderItemsCommentBO;
@@ -39,7 +40,8 @@ public class MyCommentsController extends BaseController {
     private MyOrdersService myOrdersService;
 
     @Autowired
-    private ItemCommentsService itemCommentsService;
+//    private ItemCommentsService itemCommentsService;
+    private ItemCommentsFeignClient itemCommentsService;
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息", httpMethod = "POST")
     @PostMapping("/pending")

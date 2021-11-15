@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
+ * 内部的降级(商品中心), 放到item-service里面来实现, 通过 @HystrixCommand 注解指定降级方法
+ *
+ * 调用方的降级(订单中心, 调用商品中心的服务), 由订单中心来定义降级逻辑
+ *
  * @author CoderZk
  */
 @FeignClient("foodie-item-service")
