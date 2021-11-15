@@ -1,8 +1,8 @@
-###############################################
+############################################################
 #
-# Eureka????
+# Eureka注册中心
 #
-###############################################
+############################################################
 eureka:
   client:
     serviceUrl:
@@ -13,20 +13,23 @@ server:
 management:
   server:
     port: 52001
-
 spring:
   application:
     name: hystrix-turbine
+
 turbine:
   aggregator:
-    cluster-config: default
-  app-config: foodie-order-service
+    # cluster1,cluster2
+    clusterConfig: default
   #  app-config: foodie-user-service,foodie-item-service,foodie-order-service
-  # ?????default
+  app-config: foodie-order-service
+  # 集群名称叫default
+  # eureka: instance: metadata-map: abcd-> imooc
+  # metadata['abcd']
   cluster-name-expression: '"default"'
-  # ??Host + Port ??????????
+  # 根据host + port的形式组合来进行区分
   combine-host-port: true
-  # ???actuator???????????
+  # 从哪个actuator的端点拉取方法调用信息
   instanceUrlSuffix:
     default: actuator/hystrix.stream
 
