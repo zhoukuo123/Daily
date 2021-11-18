@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:zhoukuo123/config-repo.git
+          # 强制拉取资源文件
+          force-pull: true
+          username:
+          password:
+#          ignore-local-ssh-settings: true
+#          host-key:
+#          host-key-algorithm: ssh-rsa
+#          private-key: |
+#            -----BEGIN RSA PRIVATE KEY-----
+#            JKQIBAAKCAgEAzcTvFqM7qjgpJdoAQ4RusvnYSKwFKuDkZcJ1toa3b//Scgjj
+#            KQTfam1hxrAINKBHEtQHBbJckk3+a2m0tYwksfMWPqKp01Mr4n7y7JkVV5MnJX9m
+#            O21H+NGb9jdpps18aLHN8+bkwPEsj2ird/H9QpNsJ0y8nUyWm1HgqTUor4wnIJI5
+#            kGjQduR1DqxCLUkckbV3GWq9q8UrsWan+iR3DBnhn8m6X5G2fNFikxvfsS74r+jf
+#            WvdUVCNLbPbyiW3p3PgLJwSeaVek97cGcVn6+cp3uXaUvuOWH/s7QBZ2sA1JxK6K
+#            UTNBokAAJ7N0YyLbSzUlk1+7URWJkBPuK7+i3bt9jLtc065Dkoq/o50pnpQOHzBq
+#            abgogvKTj7JFfq4ngzD6na20hlVngDdaxuKjszfP3/DKUzfclU24KZ/l4l39u/mk
+#            PguTe3XK5S6oByoEMeQTld21/ZM9/l9Aaj0dWXsfMNCd5t9HaLweksVuP8NzajIN
+#            krNfjacIyAp4YwTZtPhTwtqozPoWj7vQTe4FxTVzqmlE1jDENj7khdOmvvESrXfI
+#            gN3AnWrH3pagHrKpIRngzOMCeedkQPJocFIJpv3+Bhcfm1qO4Py4TXUSBgKsfie7
+#            PV6O+o/w26/Oa3gtDNFcT/woGSOxld8l1CRgfl7q409xmhScSjaVTgQCurcCAwEA
+#            AQKCAgEAi8Jj5gtOvinRAO2V2kX77kI2ff2gsOP5HYi77RKJS2AFrwCMUdMGcEIE
+#            9C+iEyR9wbMTZfIkYBbrZEdyvxCF5/vEsxxGnstR9k/lbX/4d/fx0c07QcfS55Rv
+#            CwfOEcZl5rJFwZCk9MuaSXl9ZUWOkAaTognD3k8jyDEPl74MeVeHR98pjAU0+lvn
+#            ieTEOf/7kJghYbkXRLDyIVcpZoQX+7ckgSRCGyFcQmDxRBvdjnnp3YkdE6sDsvYa
+#            B9OfHmryOeybno/LjJ9D5CCDFsBX8Att0CFTnGf2EpjQQJJBYQhVf2pRdh+LR8mS
+#            kWSY+7C0I9vgPr35+3PWcG6pCTvrQNmNSceDBaMDI6jOV1H1zf+sRnALRdjYpaf+
+#            hJBQEYTxdMvb9+2xe1CI1CYPOEIqlddBttMNXBvHJxtGsQDqxFp0SN8n4ICCcZGn
+#            Nrj5JRJ26mU+KpxbP6wUgSq6UDtgo1pbKnSdXxH/8EewOerPfByr2KWNE5CVneXC
+#            9mEjGInLaf2el7Jfwdt9mu4raftjmS/+tBD/q+us10ZpofGYauwghzlShJw+NJVo
+#            UgjWQmCe34MprI+sHZIvaJ6avXqRuwSZbrPNrUNmDccs3wAq6o8wFqBW5oNbihmX
+#            xk6PYO5Eto/JRu3NdBmnjT0J1tuoYNBfRruNFK0hp3p0lhFYXfECggEBAOWiULlp
+#            o4XbHkgKr7iy5673TTg9Xos+kMIRmGEkodZztjOj78MwgOTeSFeahFwbLI5SzKgl
+#            baIaokgnjfaU331yqtFnkd/951rmYVK/U9BcR5bRDT114lNQy3axZqSIjeuNQiwQ
+#            jwVQ6WyFDQN36I7Uk5qBZBgK3B82VT+J8p9Gc8RVlqY+wQqYNl+tg1R4sS9R/YuC
+#            Idr8xtRTP9BfqIAmnw1z92phx4+Ui6nB6KZIqgkO2AP+hPNp8lI+OUM6OROIpxqf
+#            gSRL3TQ/sVwjdPHFGgis0VlH3yMEhxkv1ZalIkVbK3FxLhkzw8Bd9Z5KUVqrh99o
+#            2JZQM3lC7oyzmQkCggEBAOVlJ/RfaABIn5/YrBf24Opmz9/K9utWLe2zmdJgJ6FU
+#            0QxPZNajL8MWPlbEvPh4RfZ4UZTSkMuZIltYGIm0LSh8dokZVXVQZ0wlhJadSShq
+#            MecGTBYqp5HSVXueNXFdcqX9n4gRWcOwTxWIjCQmI4N1CYcGtBS2jsNHLaKCfgKl
+#            Anmv+/hgJ0H5PJx+q6pmB84dvbrzUy9c5VYB+e+A03XXrBs9/6Y0q0njI58PLkYE
+#            2U5obMZCOoo7W/lUDdZ1ojQGOo6stqjUBFhrDC5QqNQ/rYDVgP5V+hdXYexdZ7UK
+#            0Bg2UEXiABna0TDfk3ORDriYvCBpMIAbX43PstFLZb8CggEACuTBWZpmVIJJlHdV
+#            ULjD/uvicOmQY6CrM1msVedr+gVxPk/nnuXdJ35YBjfhUZFEctgAt3VXFxqWWj/u
+#            HyV+2K+o5Ng59ltQL2LAeTF0Y20NRF1UeHbwLq2liVLvIJ0Nxn/kBL0gW8sz158U
+#            N/bnRGdXPTwoKG/Tc3ObZbFAnke0VDsPM4HEnKEN60oK8eXr2efU1FpvCrl1ITt1
+#            yofPMY0jfHrk4NoUon4UhhAZ3lGSJ23Z146qdfWvtjEXfFX1wTR5YOzyLmue6cyf
+#            uFRCRvnnu0OfhtG/ByU+13YKduQMlSe3DuGkozNudODANyslYtzCTFnn9HGHj5ga
+#            Qvh+KQKCAQBZ93VXEz/vtIveHhVIhMurQs1OQQTcQX1b12+BobKJRIGEaXLr9y5Z
+#            PdUPJLPUYx9VTdT5ICgnoZRm7MMa5q47Ta0TkfsBOpp4s9IvW9qAXj3aFI8stmfn
+#            +e0KwX7GSlcXoMO7ksp4xCIQGPCVkNumx/UHnuproTmWfsj4DmOrV9oDrbCNtfBP
+#            oJdT7R4Yg1GWVfW+Z4X9clqDg9zpQMYuVnqqaINmRQvUu5+R11tXnLk5Vh0rGHhr
+#            FGK7A2s17AbEjpjSsgwlZJmbr8gkNgAw1hSPDa08kq22D9BY6j0tNONuS4bqEXvm
+#            p/oZR+ZFkeOLJGPL9lVOOO4d6RKBoSdzAoIBAQDYcMb+2IVfwfvQ635rkQTmQBb4
+#            t7aWBf5aE0JOzFrm6ZksfUR89hA+QAAaYfCtelCn5zV3N1GzyLR0H9dF1D43tWB5
+#            /yt/Nxgf3123H6Jzse9N7I/IHsrH1zRJ7WA/EG5s2JzpAcOBd3Hl3IJXMugCzXi7
+#            ky/H8Yh9kc7bCzV9+/iNA5Jt/mqom26nIH7lAOP9I1ykVTkkvoSSZw/fegCdy29b
+#            r2PC/lqP4K0Yrh2fXI1c8idMCMuykt56dgLq57BMKOz1v5To4QFRZ2o3f6SlbDXS
+#            VHBA7JIYLW3ZXFJ5VZGdU+8inypa4HHOO9yG7GbNYcQZyc5ZiANWHho8mP/c
+#            -----END RSA PRIVATE KEY-----
+
+#          search-paths: abc, def*
+server:
+  port: 60000

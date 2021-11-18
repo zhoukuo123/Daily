@@ -17,6 +17,8 @@
         <module>ribbon/ribbon-consumer</module>
         <module>hystrix/hystrix-turbine</module>
         <module>hystrix/hystrix-dashboard</module>
+        <module>config/config-server</module>
+        <module>config/config-client</module>
     </modules>
 
     <properties>
