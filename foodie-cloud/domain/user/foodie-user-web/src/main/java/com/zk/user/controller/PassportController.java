@@ -5,6 +5,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.zk.controller.BaseController;
 import com.zk.pojo.JSONResult;
 import com.zk.pojo.ShopcartBO;
+import com.zk.user.UserApplicationProperties;
 import com.zk.user.pojo.Users;
 import com.zk.user.pojo.bo.UserBO;
 import com.zk.user.pojo.vo.UsersVO;
@@ -15,8 +16,10 @@ import com.zk.utils.MD5Utils;
 import com.zk.utils.RedisOperator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,6 +35,7 @@ import java.util.UUID;
 @Api(value = "注册登录", tags = {"用于注册登录的相关接口"})
 @RestController
 @RequestMapping("/passport")
+@Slf4j
 public class PassportController extends BaseController {
 
     @Resource
@@ -39,6 +43,9 @@ public class PassportController extends BaseController {
 
     @Resource
     private RedisOperator redisOperator;
+
+    @Autowired
+    private UserApplicationProperties userApplicationProperties;
 
     @ApiOperation(value = "用户名是否存在", notes = "用户名是否存在", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
@@ -54,6 +61,12 @@ public class PassportController extends BaseController {
     public JSONResult register(@RequestBody UserBO userBO,
                                HttpServletRequest request,
                                HttpServletResponse response) {
+        if (userApplicationProperties.isDisableRegistration()) {
+            log.info("user registration request is blocked - {}", userBO.getUsername());
+            return JSONResult.errorMsg("当前注册用户过多, 请稍后再试");
+        }
+
+
         // 校验
         String username = userBO.getUsername();
         String password = userBO.getPassword();

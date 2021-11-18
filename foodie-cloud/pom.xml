@@ -33,6 +33,8 @@
         <module>domain/cart/foodie-cart-web</module>
         <module>platform/hystrix-turbine</module>
         <module>platform/hystrix-dashboard</module>
+        <module>untitled</module>
+        <module>platform/config-server</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -1,0 +1,35 @@
+server:
+  port: 20003
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri:
+          force-pull: true
+          username:
+          password:
+          # 将配置文件放到接入方服务名称对应文件夹下面
+          search-paths: '{application}'
+          # 属性重载
+        overrides:
+          test: mytest
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka/
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  security:
+    enabled: false

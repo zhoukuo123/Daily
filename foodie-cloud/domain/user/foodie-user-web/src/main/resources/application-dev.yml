@@ -3,10 +3,12 @@ server:
 
 spring:
   datasource:
-    # 拆分数据源到独立database instance, 或者独立schema
+  # 拆分数据源到独立database instance, 或者独立schema
     # url: jdbc:mysql://localhost:3306/foodie-cloud-item?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC
-    url: jdbc:mysql://localhost:3306/foodie-shop-dev?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC
-    password: zhoukuo
+#    url: jdbc:mysql://localhost:3306/foodie-shop-dev?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC
+#    password: zhoukuo
+    url: ${mariadb.url}
+    password: ${mariadb.password}
   redis:
     # redis 单机单实例
     database: 0
@@ -33,17 +35,17 @@ mybatis:
 
 
 ### 开启所有actuator-endpoint
-management:
-  endpoint:
-    health:
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-#        include: health, info, xxx
-  security:
-    enabled: false
+#management:
+#  endpoint:
+#    health:
+#      show-details: always
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+##        include: health, info, xxx
+#  security:
+#    enabled: false
 
 hystrix:
   command:
