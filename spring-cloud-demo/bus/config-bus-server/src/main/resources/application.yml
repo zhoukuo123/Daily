@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: config-bus-server
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:zhoukuo123/config-repo.git
+          # 强制拉取资源文件
+          force-pull: true
+          username:
+          password:
+
+
+server:
+  port: 60002
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  security:
+    enabled: false
