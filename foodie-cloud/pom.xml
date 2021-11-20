@@ -35,6 +35,7 @@
         <module>platform/hystrix-dashboard</module>
         <module>untitled</module>
         <module>platform/config-server</module>
+        <module>platform/gateway</module>
     </modules>
 
     <packaging>pom</packaging>
