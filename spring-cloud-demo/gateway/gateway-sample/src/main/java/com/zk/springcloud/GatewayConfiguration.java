@@ -19,6 +19,9 @@ public class GatewayConfiguration {
     @Autowired
     private TimerFilter timerFilter;
 
+    @Autowired
+    private AuthFilter authFilter;
+
     @Bean
     @Order
     public RouteLocator customizedRoutes(RouteLocatorBuilder builder) {
@@ -28,7 +31,8 @@ public class GatewayConfiguration {
                         .and().header("name")
                         .filters(f -> f.stripPrefix(1)
                                 .addResponseHeader("java-param", "gateway-config")
-//                                .filter(timerFilter)
+                                .filter(timerFilter)
+                                .filter(authFilter)
                         )
                         .uri("lb://FEIGN-CLIENT")
                 )
