@@ -36,4 +36,6 @@ public class RedisLimiterConfiguration {
         return new RedisRateLimiter(20, 50);
     }
 
+    // TODO in-memory 限流器 阅读 RedisRateLimiter 代码 实现一个自己的限流工具类
+
 }
