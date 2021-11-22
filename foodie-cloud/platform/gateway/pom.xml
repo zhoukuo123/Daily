@@ -37,6 +37,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>
+
+        <!-- 因为 spring cloud gateway 是基于 webflux 的,
+       如果非要 web 支持的话需要导入 spring-boot-starter-webflux 而不是 spring-boot-starter-web -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-auth-api</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>

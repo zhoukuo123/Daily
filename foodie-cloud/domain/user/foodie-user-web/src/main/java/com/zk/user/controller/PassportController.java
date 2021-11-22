@@ -2,6 +2,10 @@ package com.zk.user.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.zk.auth.service.AuthService;
+import com.zk.auth.service.pojo.Account;
+import com.zk.auth.service.pojo.AuthCode;
+import com.zk.auth.service.pojo.AuthResponse;
 import com.zk.controller.BaseController;
 import com.zk.pojo.JSONResult;
 import com.zk.pojo.ShopcartBO;
@@ -26,6 +30,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,6 +51,13 @@ public class PassportController extends BaseController {
 
     @Autowired
     private UserApplicationProperties userApplicationProperties;
+
+    @Autowired
+    private AuthService authService;
+
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String REFRESH_TOKEN_HEADER = "refresh-token";
+    private static final String UID_HEADER = "user-id";
 
     @ApiOperation(value = "用户名是否存在", notes = "用户名是否存在", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
@@ -169,6 +181,15 @@ public class PassportController extends BaseController {
             return JSONResult.errorMsg("用户名或密码不正确");
         }
 
+        AuthResponse token = authService.tokennize(userResult.getId());
+        if (!AuthCode.SUCCESS.getCode().equals(token.getCode())) {
+            log.error("Token error - uid={}", userResult.getId());
+            return JSONResult.errorMsg("Token error");
+        }
+
+        // 将token添加到header当中
+        addAuth2Header(response, token.getAccount());
+
         // 信息脱敏
 //        userResult = setNullProperty(userResult);
 
@@ -281,6 +302,17 @@ public class PassportController extends BaseController {
                              HttpServletRequest request,
                              HttpServletResponse response) {
 
+        Account account = Account.builder()
+                .token(request.getHeader(AUTH_HEADER))
+                .refreshToken(request.getHeader(REFRESH_TOKEN_HEADER))
+                .userId(userId)
+                .build();
+        AuthResponse auth = authService.delete(account);
+        if (!AuthCode.SUCCESS.getCode().equals(auth.getCode())) {
+            log.error("Token error - uid={}", userId);
+            return JSONResult.errorMsg("Token error");
+        }
+
         // 清除用户相关信息的cookie
         CookieUtils.deleteCookie(request, response, "user");
 
@@ -290,8 +322,21 @@ public class PassportController extends BaseController {
         // 用户退出登录, 清除redis中user的会话信息
         redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
 
-
         return JSONResult.ok();
+    }
+
+    // TODO 修改前端js代码
+    // 在前端页面里拿到Authorization, refresh-token和user-id
+    // 前端每次请求服务, 都把这几个参数带上
+    private void addAuth2Header(HttpServletResponse response, Account token) {
+        response.setHeader(AUTH_HEADER, token.getToken());
+        response.setHeader(REFRESH_TOKEN_HEADER, token.getRefreshToken());
+        response.setHeader(UID_HEADER, token.getUserId());
+
+        // 让前端感知到, 过期时间一天, 这样可以在临近过期的时候refresh token
+        Calendar expTime = Calendar.getInstance();
+        expTime.add(Calendar.DAY_OF_MONTH, 1);
+        response.setHeader("token-exp-time", expTime.getTimeInMillis() + "");
     }
 
 }

@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         AuthResponse token = verify(account);
 
         AuthResponse resp = new AuthResponse();
-        if (AuthCode.SUCCESS.equals(token.getCode())) {
+        if (AuthCode.SUCCESS.getCode().equals(token.getCode())) {
             redisTemplate.delete(account.getRefreshToken());
             redisTemplate.delete(account.getUserId());
             resp.setCode(AuthCode.SUCCESS.getCode());

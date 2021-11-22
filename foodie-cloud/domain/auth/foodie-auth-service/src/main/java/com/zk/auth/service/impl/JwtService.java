@@ -42,6 +42,7 @@ public class JwtService {
         String token = JWT.create()
                 .withIssuer(ISSUE)
                 .withIssuedAt(now)
+                // token 过期时间
                 .withExpiresAt(new Date(now.getTime() + TOKEN_EXP_TIME))
                 .withClaim(USER_ID, acct.getUserId())
                 .sign(algorithm);
