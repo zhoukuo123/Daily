@@ -11,6 +11,10 @@
     <modules>
         <module>service/restroom-service</module>
         <module>service/restroom-service/restroom-api</module>
+        <module>service/employee-service</module>
+        <module>service/employee-service/employee-api</module>
+        <module>service/employee-service/employee-dao</module>
+        <module>service/employee-service/employee-service-core</module>
     </modules>
 
     <properties>
