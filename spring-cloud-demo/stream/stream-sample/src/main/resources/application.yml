@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: stream-sample
+  # RabbitMQ连接字符串
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  main:
+    allow-bean-definition-overriding: true
+  # 绑定 Channel 到 broadcast
+  cloud:
+    stream:
+      bindings:
+        myTopic-consumer:
+          destination: broadcast
+        myTopic-producer:
+          destination: broadcast
+  # 消息分组示例
+        group-consumer:
+          destination: group-topic
+          group: Group-A
+          ## 打开消费者的消费分区功能
+          consumer:
+            partitioned: true
+        group-producer:
+          destination: group-topic
+          ## 两个消息分区
+          producer:
+            partition-count: 2
+            # SpEL(Key resolver)
+            # 只有索引参数为1的节点(消费者), 才能消费消息
+            partition-key-expression: 1
+      ## 当前消费者实例总数
+      instance-count: 2
+      ## 最大值instanceCount-1, 当前实例的索引号
+      instance-index: 0
+  ## 消费分区配置
+
+
+
+
+
+
+server:
+  port: 63000
+
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  security:
+    enabled: false
