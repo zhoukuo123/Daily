@@ -17,7 +17,18 @@ spring:
           destination: broadcast
         myTopic-producer:
           destination: broadcast
-  # 消息分组示例
+        ### 延迟消息配置
+        delayed-consumer:
+          destination: delayed-topic
+        delayed-producer:
+          destination: delayed-topic
+      # 定义 delayed 类型的 exchange
+      rabbit:
+        bindings:
+          delayed-producer:
+            producer:
+              delayed-exchange: true
+        # 消息分组示例
         group-consumer:
           destination: group-topic
           group: Group-A
@@ -26,7 +37,7 @@ spring:
             partitioned: true
         group-producer:
           destination: group-topic
-          ## 两个消息分区
+          ## 消费分区配置, 两个消息分区
           producer:
             partition-count: 2
             # SpEL(Key resolver)
@@ -36,7 +47,8 @@ spring:
       instance-count: 2
       ## 最大值instanceCount-1, 当前实例的索引号
       instance-index: 0
-  ## 消费分区配置
+
+
 
 
 
