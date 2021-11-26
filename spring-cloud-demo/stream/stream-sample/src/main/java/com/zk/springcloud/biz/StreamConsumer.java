@@ -1,12 +1,15 @@
 package com.zk.springcloud.biz;
 
 import com.zk.springcloud.topic.DelayedTopic;
+import com.zk.springcloud.topic.ErrorTopic;
 import com.zk.springcloud.topic.GroupTopic;
 import com.zk.springcloud.topic.MyTopic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author CoderZk
@@ -16,10 +19,13 @@ import org.springframework.cloud.stream.messaging.Sink;
         Sink.class,
         MyTopic.class,
         GroupTopic.class,
-        DelayedTopic.class
+        DelayedTopic.class,
+        ErrorTopic.class
 }
 )
 public class StreamConsumer {
+
+    private AtomicInteger count = new AtomicInteger(1);
 
     @StreamListener(Sink.INPUT)
     public void consume(Object payload) {
@@ -31,13 +37,29 @@ public class StreamConsumer {
         log.info("My message consumed successfully, payload={}", payload);
     }
 
+    // 消息分组 & 消息分区示例
     @StreamListener(GroupTopic.INPUT)
     public void consumeGroupMessage(Object payload) {
         log.info("Group message consumed successfully, payload={}", payload);
     }
 
+    // 延迟消息示例
     @StreamListener(DelayedTopic.INPUT)
     public void consumeDelayedMessage(MessageBean bean) {
         log.info("Delayed message consumed successfully, payload={}", bean.getPayload());
+    }
+
+    // 异常重试(单机版)
+    @StreamListener(ErrorTopic.INPUT)
+    public void consumeErrorMessage(MessageBean bean) {
+        log.info("Are you OK?");
+
+        if (count.incrementAndGet() % 3 == 0) {
+            log.info("Fine, thank you. And you?");
+            count.set(0);
+        } else {
+            log.info("What's your problem?");
+            throw new RuntimeException("I'm not OK");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.zk.springcloud.biz;
 
 import com.zk.springcloud.topic.DelayedTopic;
+import com.zk.springcloud.topic.ErrorTopic;
 import com.zk.springcloud.topic.GroupTopic;
 import com.zk.springcloud.topic.MyTopic;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +28,15 @@ public class Controller {
     @Autowired
     private DelayedTopic delayedTopicProducer;
 
+    @Autowired
+    private ErrorTopic errorTopicProducer;
+
     @PostMapping("/send")
     public void sendMessage(@RequestParam(value = "body") String body) {
         producer.output().send(MessageBuilder.withPayload(body).build());
     }
 
+    // 消息分组和消息分区
     @PostMapping("/sendToGroup")
     public void sendMessageToGroup(@RequestParam(value = "body") String body) {
         groupTopicProducer.output().send(MessageBuilder.withPayload(body).build());
@@ -49,5 +54,14 @@ public class Controller {
                 MessageBuilder.withPayload(msg)
                         .setHeader("x-delay", 1000 * seconds)
                         .build());
+    }
+
+    // 异常重试(单机版)
+    @PostMapping("/sendError")
+    public void sendErrorMessage(@RequestParam(value = "body") String body) {
+        MessageBean msg = new MessageBean();
+        msg.setPayload(body);
+
+        errorTopicProducer.output().send(MessageBuilder.withPayload(msg).build());
     }
 }

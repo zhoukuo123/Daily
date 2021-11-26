@@ -17,6 +17,17 @@ spring:
           destination: broadcast
         myTopic-producer:
           destination: broadcast
+
+        # 异常消息(单机版重试)
+        error-consumer:
+          destination: error-out-topic
+          # 重试次数(客户端消费者本机重试, 而不是重新把消息发回给rabbitmq)
+          # 次数=1相当于不重试
+          consumer:
+            max-attempts: 2
+        error-producer:
+          destination: error-out-topic
+
         ### 延迟消息配置
         delayed-consumer:
           destination: delayed-topic
