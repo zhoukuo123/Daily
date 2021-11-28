@@ -49,6 +49,23 @@ spring:
 #    cluster:
 #      nodes: 192.168.1.201:6379, 192.168.1.202:6379, 192.168.1.203:6379, 192.168.1.204:6379, 192.168.1.205:6379, 192.168.1.206:6379
 
+####################################################################################
+# Stream配置
+####################################################################################
+  cloud:
+    stream:
+      bindings:
+        force-logout-consumer:
+          destination: force-logout-topic
+          group: force-logout-group
+          consumer:
+            max-attempts: 2
+        force-logout-producer:
+          destination: force-logout-topic
+
+
+
+
 
 mybatis:
   configuration:

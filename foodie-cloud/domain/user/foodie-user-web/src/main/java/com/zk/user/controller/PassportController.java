@@ -14,6 +14,7 @@ import com.zk.user.pojo.Users;
 import com.zk.user.pojo.bo.UserBO;
 import com.zk.user.pojo.vo.UsersVO;
 import com.zk.user.service.UserService;
+import com.zk.user.stream.ForceLogoutTopic;
 import com.zk.utils.CookieUtils;
 import com.zk.utils.JsonUtils;
 import com.zk.utils.MD5Utils;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -54,6 +56,9 @@ public class PassportController extends BaseController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private ForceLogoutTopic producer;
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String REFRESH_TOKEN_HEADER = "refresh-token";
@@ -337,6 +342,20 @@ public class PassportController extends BaseController {
         Calendar expTime = Calendar.getInstance();
         expTime.add(Calendar.DAY_OF_MONTH, 1);
         response.setHeader("token-exp-time", expTime.getTimeInMillis() + "");
+    }
+
+    // FIXME 将这个接口从网关层移除, 不对外暴露
+    @ApiOperation(value = "用户强制退出登录", notes = "用户退出登录", httpMethod = "POST")
+    @PostMapping("/forceLogout")
+    public JSONResult forceLogout(@RequestParam String userIds) {
+        if (StringUtils.isNotBlank(userIds)) {
+            for (String uid : userIds.split(",")) {
+                log.info("send logout message, uid={}", uid);
+                producer.output().send(MessageBuilder.withPayload(uid).build());
+            }
+        }
+
+        return JSONResult.ok();
     }
 
 }
