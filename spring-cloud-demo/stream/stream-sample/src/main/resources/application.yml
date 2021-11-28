@@ -7,6 +7,10 @@ spring:
     port: 5672
     username: guest
     password: guest
+    ##########  默认全局开启 异常消息 requeue 重试
+#    listener:
+#      direct:
+#        default-requeue-rejected: true
   main:
     allow-bean-definition-overriding: true
   # 绑定 Channel 到 broadcast
@@ -27,6 +31,17 @@ spring:
             max-attempts: 2
         error-producer:
           destination: error-out-topic
+
+        # 异常消息(requeue 重试)
+        requeue-consumer:
+          destination: requeue-topic
+          group: requeue-group
+          ## 仅对当前requeue-consumer, 开启requeue重试
+          consumer:
+            requeueRejected: true
+            max-attempts: 1
+        requeue-producer:
+          destination: requeue-topic
 
         ### 延迟消息配置
         delayed-consumer:

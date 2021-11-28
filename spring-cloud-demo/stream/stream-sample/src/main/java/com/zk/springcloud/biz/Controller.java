@@ -1,9 +1,6 @@
 package com.zk.springcloud.biz;
 
-import com.zk.springcloud.topic.DelayedTopic;
-import com.zk.springcloud.topic.ErrorTopic;
-import com.zk.springcloud.topic.GroupTopic;
-import com.zk.springcloud.topic.MyTopic;
+import com.zk.springcloud.topic.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
@@ -30,6 +27,9 @@ public class Controller {
 
     @Autowired
     private ErrorTopic errorTopicProducer;
+
+    @Autowired
+    private RequeueTopic requeueTopic;
 
     @PostMapping("/send")
     public void sendMessage(@RequestParam(value = "body") String body) {
@@ -63,5 +63,14 @@ public class Controller {
         msg.setPayload(body);
 
         errorTopicProducer.output().send(MessageBuilder.withPayload(msg).build());
+    }
+
+    // 异常重试(联机版-重新入列)
+    @PostMapping("/requeue")
+    public void sendErrorMessageToMQ(@RequestParam(value = "body") String body) {
+        MessageBean msg = new MessageBean();
+        msg.setPayload(body);
+
+        requeueTopic.output().send(MessageBuilder.withPayload(msg).build());
     }
 }
