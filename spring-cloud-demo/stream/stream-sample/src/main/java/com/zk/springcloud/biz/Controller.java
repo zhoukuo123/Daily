@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,7 +28,10 @@ public class Controller {
     private ErrorTopic errorTopicProducer;
 
     @Autowired
-    private RequeueTopic requeueTopic;
+    private RequeueTopic requeueTopicProducer;
+
+    @Autowired
+    private DlqTopic dlqTopicProducer;
 
     @PostMapping("/send")
     public void sendMessage(@RequestParam(value = "body") String body) {
@@ -71,6 +73,15 @@ public class Controller {
         MessageBean msg = new MessageBean();
         msg.setPayload(body);
 
-        requeueTopic.output().send(MessageBuilder.withPayload(msg).build());
+        requeueTopicProducer.output().send(MessageBuilder.withPayload(msg).build());
+    }
+
+    // 死信队列测试
+    @PostMapping("/dlq")
+    public void sendMessageToDlq(@RequestParam(value = "body") String body) {
+        MessageBean msg = new MessageBean();
+        msg.setPayload(body);
+
+        dlqTopicProducer.output().send(MessageBuilder.withPayload(msg).build());
     }
 }

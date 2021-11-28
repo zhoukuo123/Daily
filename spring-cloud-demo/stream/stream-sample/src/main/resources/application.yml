@@ -39,9 +39,21 @@ spring:
           ## 仅对当前requeue-consumer, 开启requeue重试
           consumer:
             requeueRejected: true
+            # 必须把max-attempts设置为1, 否则requeue不能生效
             max-attempts: 1
         requeue-producer:
           destination: requeue-topic
+
+        # 死信队列配置
+        dlq-consumer:
+          destination: dlq-topic
+          group: dlq-group
+          consumer:
+            ## 尝试次数
+            max-attempts: 2
+        dlq-producer:
+          destination: dlq-topic
+
 
         ### 延迟消息配置
         delayed-consumer:
@@ -54,6 +66,10 @@ spring:
           delayed-producer:
             producer:
               delayed-exchange: true
+          ### 开启死信队列 (默认 topic.dlq)
+          dlq-consumer:
+            consumer:
+              auto-bind-dlq: true
         # 消息分组示例
         group-consumer:
           destination: group-topic

@@ -18,7 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         GroupTopic.class,
         DelayedTopic.class,
         ErrorTopic.class,
-        RequeueTopic.class
+        RequeueTopic.class,
+        DlqTopic.class
 }
 )
 public class StreamConsumer {
@@ -72,5 +73,19 @@ public class StreamConsumer {
         }
 
         throw new RuntimeException("I'm not OK");
+    }
+
+    // 死信队列测试
+    @StreamListener(DlqTopic.INPUT)
+    public void consumeDlqMessage(MessageBean bean) {
+        log.info("Dlq - Are you OK?");
+
+        if (count.incrementAndGet() % 3 == 0) {
+            log.info("Dlq - Fine, thank you. And you?");
+//            count.set(0);
+        } else {
+            log.info("Dlq - What's your problem?");
+            throw new RuntimeException("I'm not OK");
+        }
     }
 }
