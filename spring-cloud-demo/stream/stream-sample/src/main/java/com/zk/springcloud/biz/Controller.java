@@ -33,6 +33,9 @@ public class Controller {
     @Autowired
     private DlqTopic dlqTopicProducer;
 
+    @Autowired
+    private FallbackTopic fallbackTopicProducer;
+
     @PostMapping("/send")
     public void sendMessage(@RequestParam(value = "body") String body) {
         producer.output().send(MessageBuilder.withPayload(body).build());
@@ -83,5 +86,22 @@ public class Controller {
         msg.setPayload(body);
 
         dlqTopicProducer.output().send(MessageBuilder.withPayload(msg).build());
+    }
+
+    // fallback + 升版
+    @PostMapping("/fallback")
+    public void sendMessageToFallback(@RequestParam(value = "body") String body, @RequestParam(value = "version", defaultValue = "1.0") String version) {
+        MessageBean msg = new MessageBean();
+        msg.setPayload(body);
+        // place order
+        // placeOrderV1
+        // placeOrderV2
+
+        // queue 1
+        // queue 2
+
+        fallbackTopicProducer.output().send(MessageBuilder.withPayload(msg)
+                .setHeader("version", version)
+                .build());
     }
 }

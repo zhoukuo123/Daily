@@ -54,6 +54,16 @@ spring:
         dlq-producer:
           destination: dlq-topic
 
+        # Fallback配置
+        fallback-consumer:
+          destination: fallback-topic
+          group: fallback-group
+          consumer:
+            ## 尝试次数
+            max-attempts: 2
+        fallback-producer:
+          destination: fallback-topic
+
 
         ### 延迟消息配置
         delayed-consumer:

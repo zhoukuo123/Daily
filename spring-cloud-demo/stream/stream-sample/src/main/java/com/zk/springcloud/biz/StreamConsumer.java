@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.Header;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,7 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         DelayedTopic.class,
         ErrorTopic.class,
         RequeueTopic.class,
-        DlqTopic.class
+        DlqTopic.class,
+        FallbackTopic.class
 }
 )
 public class StreamConsumer {
@@ -82,10 +86,29 @@ public class StreamConsumer {
 
         if (count.incrementAndGet() % 3 == 0) {
             log.info("Dlq - Fine, thank you. And you?");
-//            count.set(0);
         } else {
             log.info("Dlq - What's your problem?");
             throw new RuntimeException("I'm not OK");
         }
+    }
+
+    // fallback + 升级版本
+    @StreamListener(FallbackTopic.INPUT)
+    public void goodbyeBadGuy(MessageBean bean, @Header("version") String version) {
+        log.info("Fallback - Are you OK?");
+
+        if ("1.0".equalsIgnoreCase(version)) {
+            log.info("Fallback - Fine, thank you. And you?");
+        } else if ("2.0".equalsIgnoreCase(version)) {
+            log.info("unsupported version");
+            throw new RuntimeException("I'm not OK");
+        } else {
+            log.info("Fallback - version={}", version);
+        }
+    }
+
+    @ServiceActivator(inputChannel = "fallback-topic.fallback-group.errors")
+    public void fallback(Message<?> message) {
+        log.info("fallback entered");
     }
 }
