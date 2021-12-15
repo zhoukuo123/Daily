@@ -23,6 +23,7 @@
         <module>redisson-lock</module>
         <module>sharding-jdbc-demo</module>
         <module>xa-demo</module>
+        <module>mycat-demo</module>
     </modules>
 
     <properties>
