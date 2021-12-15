@@ -6,6 +6,7 @@ import org.apache.shardingsphere.api.sharding.standard.PreciseShardingValue;
 import java.util.Collection;
 
 public class MySharding implements PreciseShardingAlgorithm<Long> {
+
     @Override
     public String doSharding(Collection<String> availableTargetNames, PreciseShardingValue<Long> shardingValue) {
         Long id = shardingValue.getValue();

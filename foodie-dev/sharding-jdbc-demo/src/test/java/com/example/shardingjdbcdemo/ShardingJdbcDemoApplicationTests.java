@@ -30,6 +30,26 @@ public class ShardingJdbcDemoApplicationTests {
 
     @Test
     @Transactional
+    public void testOrderDistributedTransactions() {
+        Order order = new Order();
+        order.setOrderId(1l);
+        order.setUserId(15);
+        order.setOrderAmount(BigDecimal.TEN);
+        order.setOrderStatus(1);
+        orderMapper.insertSelective(order);
+
+        Order order2 = new Order();
+        order2.setOrderId(2l);
+        order2.setUserId(16);
+        order2.setOrderAmount(BigDecimal.TEN);
+        order2.setOrderStatus(1);
+        orderMapper.insertSelective(order2);
+
+        throw new RuntimeException("test XA");
+    }
+
+    @Test
+    @Transactional
     public void testOrder() {
         Order order = new Order();
         order.setOrderId(1l);
