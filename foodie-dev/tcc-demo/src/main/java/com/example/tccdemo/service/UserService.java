@@ -15,8 +15,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Slf4j
 public class UserService {
+
     @Resource
     private UserMapper userMapper;
+
     @Autowired
     private CuratorFramework zkClient;
 
@@ -47,11 +49,11 @@ public class UserService {
     public int insertUser(User user, String token) throws Exception {
         InterProcessMutex lock = new InterProcessMutex(zkClient, "/" + token);
         boolean isLock = lock.acquire(30, TimeUnit.SECONDS);
+
         if (isLock) {
             return userMapper.insertSelective(user);
-
-
         }
+
         return 0;
     }
 }

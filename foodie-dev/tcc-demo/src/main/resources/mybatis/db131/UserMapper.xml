@@ -313,9 +313,11 @@
           age = #{age,jdbcType=INTEGER},
         </if>
         update_count = update_count + 1,
+#           修改 version 字段
         version = version + 1
       </set>
       where id = #{id,jdbcType=INTEGER}
+#           利用乐观锁, 实现update操作的幂等性
       and version = #{version,jdbcType=INTEGER}
 
     </update>
