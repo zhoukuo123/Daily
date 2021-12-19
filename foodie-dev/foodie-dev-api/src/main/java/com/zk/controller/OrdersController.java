@@ -15,6 +15,9 @@ import com.zk.utils.RedisOperator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +25,10 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author CoderZk
@@ -41,10 +47,50 @@ public class OrdersController extends BaseController {
     @Resource
     private RedisOperator redisOperator;
 
+    @Autowired
+    private RedissonClient redissonClient;
+
+    @ApiOperation(value = "获取订单token", notes = "获取订单token", httpMethod = "POST")
+    @PostMapping("/getOrderToken")
+    public JSONResult getOrderToken(HttpSession session) {
+        String token = UUID.randomUUID().toString();
+        redisOperator.set("ORDER_TOEKN_" + session.getId(), token, 600);
+        return JSONResult.ok(token);
+    }
+
     @ApiOperation(value = "用户下单", notes = "用户下单", httpMethod = "POST")
     @PostMapping("/create")
     public JSONResult create(@RequestBody SubmitOrderBO submitOrderBO,
                              HttpServletRequest request, HttpServletResponse response) {
+
+
+        String orderTokenKey = "ORDER_TOEKN_" + request.getSession().getId();
+        String lockKey = "LOCK_KEY_" + request.getSession().getId();
+
+        RLock lock = redissonClient.getLock(lockKey);
+        lock.lock(5, TimeUnit.SECONDS);
+
+        try {
+            String orderToken = redisOperator.get(orderTokenKey);
+
+            if (StringUtils.isBlank(orderToken)) {
+                throw new RuntimeException("orderToken 不存在");
+            }
+
+            boolean correctToken = orderToken.equals(submitOrderBO.getToken());
+            if (!correctToken) {
+                throw new RuntimeException("orderToken 不正确");
+            }
+
+            redisOperator.del(orderTokenKey);
+        } finally {
+            try {
+                lock.unlock();
+            } catch (Exception e) {
+
+            }
+        }
+
 
         if (!submitOrderBO.getPayMethod().equals(PayMethod.WEIXIN.type) &&
                 !submitOrderBO.getPayMethod().equals(PayMethod.ALIPAY.type)) {
